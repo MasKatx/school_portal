@@ -1,0 +1,64 @@
+/*--CSS Desktop width >= 1024px  --*/
+@media only screen and (min-width:64rem) {
+    .btn--close__mobile {
+        display: none;
+    }
+
+    .wrapper--flip__card {
+        padding: 44px;
+    }
+}
+
+/*--CSS Tablet width >= 740px and width < 1024px --*/
+@media only screen and (min-width:46.25rem) and (max-width:65rem) {}
+
+/*--Define general--*/
+/*---------------------------CSS Mobile width < 740px--------------------------------*/
+@media only screen and (max-width:46.25rem) {
+    .login--container {
+        padding: 0 20px;
+    }
+
+    .login--form {
+        width: 100%;
+        margin: 20px;
+    }
+
+    nav .container-fluid {
+        padding: 10px 0;
+    }
+
+    .navbar--options__right {
+        display: none;
+    }
+
+    .wrapper--navbar__list {
+        width: 100%;
+    }
+
+    .navbar--list__btn {
+        padding: 0 16px;
+    }
+
+    .navbar--list__controller {
+        display: flex;
+        padding: 10px;
+        justify-content: space-between;
+    }
+
+    .navbar--list__controller .btn--close__mobile {
+        font-size: 2.2rem;
+        color: var(--navbar-text-color);
+        padding: 10px 10px;
+    }
+
+    .navbar--list__Logo {
+        /* justify-items: ; */
+    }
+
+    .flip--card__created__Datetime {
+        color: var(--navbar-text-color);
+        font-size: 1.2rem;
+    }
+
+}

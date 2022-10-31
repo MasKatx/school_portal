@@ -1,0 +1,163 @@
+:root {
+    --login-bg-color: #FFFFFF;
+    --br-bg-color: #D9D9D9;
+    --text-color: rgb(180, 180, 180);
+    --text-color-bold: rgb(102, 102, 102);
+    --home-bg-color: #FBFBFB;
+    --navbar-bg-color: var(--login-bg-color);
+    --navbar-shadow-color: #EFEFEF;
+    --navbar-items: #dbdbdb;
+    --navbar-text-color: #4F4F76;
+    --light-green-color: #41F0D1;
+    --light-green-bold: #00ffd0;
+    --navbar-height: 60px;
+}
+
+::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: var(--br-bg-color);
+    opacity: 1;
+    /* Firefox */
+}
+
+:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: var(--br-bg-color);
+}
+
+::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: var(--br-bg-color);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;900&family=Roboto:wght@300;400;500;700&family=Trispace:wght@600&family=Yanone+Kaffeesatz:wght@700&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+
+}
+
+body {
+    font-family: 'Noto Serif JP', serif;
+    height: 100%;
+    width: 100%;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.btn--primary__bg {
+    /* #ECFDFF, #41F0D1 */
+    z-index: -1;
+    background: #a64bf4;
+    background: -webkit-linear-gradient(left, #00dbde, #fc00ff);
+    background: -o-linear-gradient(left, #00dbde, #fc00ff);
+    background: -moz-linear-gradient(left, #00dbde, #fc00ff);
+    background: linear-gradient(left, #00dbde, #fc00ff);
+    top: 0;
+    left: -100%;
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+}
+
+.btn {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 10px 24px;
+}
+
+.navbar--list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.navbar--list::-webkit-scrollbar-track {
+    background-color: #e4e4e4;
+    border-radius: 100px;
+}
+
+.navbar--list::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+    background-image: linear-gradient(180deg, #41f0d0b0 0%, #ECFDFF 99%);
+    box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
+}
+
+.rotate {
+    -webkit-transform: rotateY(-180deg);
+    -moz-transform: rotateY(-180deg);
+    -ms-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+}
+
+@keyframes toRight {
+    0% {
+        width: 0;
+    }
+
+    25% {
+        width: 25%;
+    }
+
+    50% {
+        width: 50%;
+    }
+
+    75% {
+        width: 75%;
+    }
+
+    100% {
+        width: 100%;
+    }
+}
+
+@keyframes navbarToRight {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes navbarToLeft {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+@keyframes logoRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(90deg)
+    }
+
+    50% {
+        transform: rotate(180deg)
+    }
+
+    75% {
+        transform: rotate(270deg)
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

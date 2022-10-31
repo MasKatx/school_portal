@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./asset/font/fontawesome-free-6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="./asset/css/base.css">
+    <link rel="stylesheet" href="./asset/css/loginChange.css">
+    <link rel="stylesheet" href="./asset/css/responsive.css">
+
+
+</head>
+
+<body>
+    <div id="login" class="wrapper--login">
+        <div class="login--container">
+            <form class="login--form validate-form" method="post">
+                <h1 class="login--form__title">
+                    ログイン
+                </h1>
+
+                <div class="wrapper--input validate-input" data-validate="Username is reauired">
+                    <label class="input--label input--label__username" for="username">ユーザー名</label>
+                    <div class="wrapper--fields wrapper--fields__username">
+
+                        <i class="login--form__icon fa-regular fa-user"></i>
+                        <input class="login--input__fields input__username" type="text" id="username" name="user name"
+                            placeholder="Type your username">
+
+                        <span class="input--focus"></span>
+                    </div>
+                </div>
+
+                <div class=" wrapper--input validate-input" data-validate="Password is required">
+                    <label class="input--label input--label__password" for="password">パスワード</label>
+                    <div class="wrapper--fields wrapper--fields__username">
+                        <i class="login--form__icon fa-solid fa-lock"></i>
+                        <input class="login--input__fields input__password" type="password" id="password"
+                            name="password" placeholder="Type your password">
+
+                        <span class="input--focus"></span>
+                    </div>
+                </div>
+
+                <div href="" class=" login--form__policy">
+                    <a class="login--form__link">プライバシーポリシー</a>
+                </div>
+
+
+                <div class="wrapper--btn">
+                    <div class="btn--container">
+                        <div class="btn--primary__bg"></div>
+                        <button class="btn btn--login" type="submit">
+                            Login
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
