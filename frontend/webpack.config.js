@@ -4,7 +4,7 @@ const webpack = require("webpack");
 module.exports = {
     entry: "./src/index.js",
     output: {
-        // debundle main file -> npm run build
+        // debundle mainjs file when npm run build
         path: path.resolve(__dirname, "./static/frontend"),
         filename: "[name].js",
     },
@@ -53,6 +53,7 @@ module.exports = {
             'process.env.NODE_ENV': JSON.stringify('development'),
         }),
     ],
+    // どういうエラーなのか詳細でみる
     stats: {
         errorDetails: true,
         children: true

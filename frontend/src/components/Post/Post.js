@@ -3,9 +3,11 @@ import student_img from "../../../static/images/21-02108.jpg";
 import ReadMoreText from "./ReadMoreText";
 
 export default function Post() {
-    const postAPI = "http://localhost:3000/posts"
+    let a = useRef(1)
+
     const [posts, setPosts] = useState([])
     useLayoutEffect(() => {
+        const postAPI = "http://localhost:3000/posts"
         fetch(postAPI)
             .then(function (response) {
                 return response.json();
@@ -13,6 +15,8 @@ export default function Post() {
             .then((dataObject) => {
                 setPosts(dataObject)
             })
+        console.log(a)
+        a.current += 2;
     }, []);
 
 

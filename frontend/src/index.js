@@ -15,7 +15,7 @@ import App from './components/App';
 const root = createRoot(document.getElementById('app'));
 root.render(
     <React.StrictMode>
-        <Router  >
+        <Router>
             <App />
         </Router>
     </React.StrictMode>
