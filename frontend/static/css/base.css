@@ -8,9 +8,13 @@
     --navbar-shadow-color: #EFEFEF;
     --navbar-items: #dbdbdb;
     --navbar-text-color: #4F4F76;
+    --blue-light-text-bold: #2c2c6b;
     --light-green-color: #41F0D1;
     --light-green-bold: #00ffd0;
+    --light-green-hover: #2fad96;
     --navbar-height: 60px;
+    --red-color: #fd0123df;
+    --red-color-hover: #de001e;
 }
 
 ::placeholder {
@@ -41,11 +45,14 @@
 
 body {
     font-family: 'Noto Serif JP', serif;
-    height: 100%;
     width: 100%;
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+    position: relative;
 }
 
 .btn--primary__bg {
@@ -159,5 +166,49 @@ body {
 
     100% {
         transform: rotate(360deg);
+    }
+}
+
+@keyframes QROpen {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes QRClose {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes showLess {
+    0% {
+        /* opacity: 0.5; */
+        height: 100%;
+    }
+
+    100% {
+        /* opacity: 1; */
+        height: 0;
+    }
+}
+
+@keyframes showMore {
+    0% {
+        opacity: 0.5;
+        /* height: 0; */
+    }
+
+    100% {
+        opacity: 1;
+        /* height: 100%; */
     }
 }

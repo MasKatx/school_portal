@@ -5,12 +5,88 @@
     }
 
     .wrapper--flip__card {
-        padding: 44px;
+        display: flex;
+        justify-content: center;
+        top: 0;
+        padding-top: 50px;
+    }
+
+    .flip--card__inner {
+        display: flex;
+        height: 90%;
+        width: 600px;
+        margin: 50px;
+    }
+
+    .card--description .card--description__p {
+        display: flex;
+        flex: 1;
+        font-size: 1.1rem;
+        justify-content: flex-end;
+    }
+
+    .table--row__header {
+        width: 100px;
+    }
+
+    .table--back__infor__row {
+        font-size: 1.2rem;
+    }
+
+    .table--row__header {
+        padding: 0;
+        text-align: center;
+        flex-wrap: wrap;
+    }
+
+    .table--row__description {
+        display: flex;
+        flex-direction: column;
     }
 }
 
 /*--CSS Tablet width >= 740px and width < 1024px --*/
-@media only screen and (min-width:46.25rem) and (max-width:65rem) {}
+@media only screen and (min-width:46.25rem) and (max-width:65rem) {
+    .wrapper--flip__card {
+        display: flex;
+        justify-content: center;
+        top: 0;
+        margin-top: 50px;
+    }
+
+    .flip--card__inner {
+        display: flex;
+        height: 90%;
+        width: 600px;
+        margin: 50px;
+    }
+
+    .btn--close__mobile {
+        display: none;
+    }
+
+    .card--description .card--description__p {
+        display: flex;
+        flex: 1;
+        font-size: 1.1rem;
+        justify-content: flex-end;
+    }
+
+    .table--row__header {
+        width: 100px;
+    }
+
+    .table--back__infor__row {
+        font-size: 1.2rem;
+    }
+
+    .table--row__header {
+        padding: 0;
+        text-align: center;
+        flex-wrap: wrap;
+    }
+
+}
 
 /*--Define general--*/
 /*---------------------------CSS Mobile width < 740px--------------------------------*/
@@ -52,13 +128,23 @@
         padding: 10px 10px;
     }
 
-    .navbar--list__Logo {
-        /* justify-items: ; */
-    }
 
     .flip--card__created__Datetime {
         color: var(--navbar-text-color);
         font-size: 1.2rem;
     }
 
+    .table--row__header {
+        width: 30px;
+    }
+
+    .table--back__infor__row {
+        font-size: 1rem;
+    }
+
+    .table--row__header {
+        padding: 0;
+        text-align: center;
+        flex-wrap: wrap;
+    }
 }
