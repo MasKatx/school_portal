@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     "api.apps.ApiConfig",
     "frontend.apps.FrontendConfig",
     "rest_framework",
+    "accounts.apps.AccountsConfig",
+    "portal.apps.PortalConfig",
 ]
 
 MIDDLEWARE = [
