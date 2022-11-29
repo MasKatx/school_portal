@@ -1,40 +1,63 @@
 from django.shortcuts import render
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 # Create your views here.
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from accounts.models import UserAccount
 from .models import UserProfile
+
+# serializer
 from .serializers import UserProfileSerializer
+
+# from django.http import HttpResponse
 
 
 class GetUserProfileView(APIView):
-    def get(self, request, format=None):
-        try:
-            user = self.request.user
-            username = user.username
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
 
-            user_profile = UserProfile.objects.get(user=user)
+    def get(self, request, format=None):
+
+        try:
+
+            user = request.user
+            user_profile = UserProfile.objects.filter(user=user)
             user_profile = UserProfileSerializer(user_profile)
 
-            return Response({"profile": user_profile.data, "username": str(username)})
+            return Response({"profile": user_profile.data})
         except:
-            return Response({"error": "Something went wrong when retrieving profile"})
+            return Response(
+                {"error": "Something went wrong when retrieving profile", "value": user}
+            )
 
 
 class UpdateUserProfileView(APIView):
-    def put(self, request, format=None):
+    def post(self, request, *args, **kwargs):
         try:
             user = self.request.user
             username = user.username
 
             data = self.request.data
-            first_name = data["first_name"]
-            last_name = data["last_name"]
+            name = data["name"]
             phone = data["phone"]
-            city = data["city"]
+            avatar = data["avatar"]
+            address = data["address"]
+            date_of_birth = data["date_of_birth"]
+            group_name = data["group_name"]
+            user_type = data["user_type"]
+            teacher_library = data["teacher_library"]
 
-            UserProfile.objects.filter(user=user).update(
-                first_name=first_name, last_name=last_name, phone=phone, city=city
+            UserProfile.objects.update_or_create(
+                name=name,
+                phone=phone,
+                avatar=avatar,
+                address=address,
+                date_of_birth=date_of_birth,
+                group_name=group_name,
+                user_type=user_type,
+                teacher_library=teacher_library,
             )
 
             user_profile = UserProfile.objects.get(user=user)

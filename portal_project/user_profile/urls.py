@@ -1,7 +1,9 @@
-# from django.urls import path
-# from .views import GetUserProfileView, UpdateUserProfileView
+from django.urls import path
+from .views import UpdateUserProfileView, GetUserProfileView
 
-# urlpatterns = [
-#     path("user", GetUserProfileView.as_view()),
-#     path("update", UpdateUserProfileView.as_view()),
-# ]
+# GetUserProfileView,
+
+urlpatterns = [
+    path("user/", GetUserProfileView.as_view()),
+    path("update", UpdateUserProfileView.as_view()),
+]

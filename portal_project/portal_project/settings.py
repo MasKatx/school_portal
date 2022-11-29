@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
     "rest_framework",
     "djoser",
     "accounts",
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -130,14 +132,21 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
+
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "build/static")]
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static/images")
 
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ),
 }
 
@@ -150,7 +159,7 @@ SIMPLE_JWT = {
 
 # DJOSER
 DJOSER = {
-    "LOGIN_FIELD": "email",
+    "LOGIN_FIELD": "username",
     "USER_CREATE_PASSWORD_RETYPE": True,
     "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
     "SEND_CONFIRMATION_EMAIL": True,
@@ -182,3 +191,10 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "hadiemhonglg01@gmail.com"
 EMAIL_HOST_PASSWORD = "vamdwlqxjhejjjrt"
 EMAIL_USE_TLS = True
+
+# cors
+CORS_ORIGIN_WHITELIST = ["http://127.0.0.1:3000"]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
