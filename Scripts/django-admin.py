@@ -1,4 +1,4 @@
-#!C:\Users\m_katogi\Desktop\授業\0卒業研究\src\projectenv\Scripts\python.exe
+#!C:\Users\m_katogi\Desktop\授業\0卒業研究\src\project_env\Scripts\python.exe
 # When the django-admin.py deprecation ends, remove this script.
 import warnings
 
