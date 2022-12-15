@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     "djoser",
     "accounts",
     "user_profile.apps.UserProfileConfig",
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
 ]
 
 MIDDLEWARE = [
