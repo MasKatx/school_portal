@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\l_hoangphuc\Desktop\portal_env"
+VIRTUAL_ENV="C:\Users\m_katogi\Desktop\授業\0卒業研究\src\project_env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
@@ -55,9 +55,9 @@ fi
 
 if [ -z "${VIRTUAL_ENV_DISABLE_PROMPT:-}" ] ; then
     _OLD_VIRTUAL_PS1="${PS1:-}"
-    PS1="(portal_env) ${PS1:-}"
+    PS1="(project_env) ${PS1:-}"
     export PS1
-    VIRTUAL_ENV_PROMPT="(portal_env) "
+    VIRTUAL_ENV_PROMPT="(project_env) "
     export VIRTUAL_ENV_PROMPT
 fi
 
