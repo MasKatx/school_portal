@@ -43,14 +43,16 @@ INSTALLED_APPS = [
     "rest_framework",
     "djoser",
     "accounts",
+    "portal",
     "user_profile",
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
 ]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -194,8 +196,9 @@ EMAIL_HOST_PASSWORD = "vamdwlqxjhejjjrt"
 EMAIL_USE_TLS = True
 
 # cors
-CORS_ORIGIN_WHITELIST = ["http://127.0.0.1:3000"]
+CORS_ORIGIN_WHITELIST = ["http://localhost:3000"]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://127.0.0.1:3000",
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
 ]
