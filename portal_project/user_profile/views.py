@@ -1,8 +1,12 @@
 from django.shortcuts import render
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
+
+# from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
+from rest_framework import authentication, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.http import JsonResponse
+from django.core import serializers
 
 # Create your views here.
 from accounts.models import UserAccount
@@ -13,24 +17,28 @@ from .serializers import UserProfileSerializer
 
 # from django.http import HttpResponse
 
+# class ReadOnly(BasePermission):
+#     def has_permission(self, request, view):
+#         return request.method in SAFE_METHODS
+
 
 class GetUserProfileView(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    # serializer_class = UserProfileSerializer
+    # authentication_classes = [SessionAuthentication, BasicAuthentication]
+    # authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
 
         try:
-
-            user = request.user
-            user_profile = UserProfile.objects.filter(user=user)
+            user = self.request.user
+            # username = user.fullname
+            user = UserAccount.objects.get(id=user.id)
+            user_profile = UserProfile.objects.get(id=user.id)
             user_profile = UserProfileSerializer(user_profile)
-
-            return Response({"profile": user_profile.data})
+            return JsonResponse({"fullname": user_profile.data})
         except:
-            return Response(
-                {"error": "Something went wrong when retrieving profile", "value": user}
-            )
+            return JsonResponse({"value": "erorr"})
 
 
 class UpdateUserProfileView(APIView):

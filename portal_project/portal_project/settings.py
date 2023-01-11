@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "djoser",
     "accounts",
-    "user_profile.apps.UserProfileConfig",
+    "user_profile",
 ]
 
 MIDDLEWARE = [
@@ -154,6 +154,7 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("JWT",),
     "ACCESS_TOKEN_TIMELIFE": timedelta(minutes=60),
     "REFRESH_TOKEN_TIMELIFE": timedelta(days=1),
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
 }
 
 
@@ -165,7 +166,7 @@ DJOSER = {
     "SEND_CONFIRMATION_EMAIL": True,
     "SET_USER_NAME_RETYPE": True,
     "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
-    "USERNAME_RESET_CONFIRM_URL": "email/reset/confirm/{uid}/{token}",
+    # "USERNAME_RESET_CONFIRM_URL": "email/reset/confirm/{uid}/{token}",
     "ACTIVATION_URL": "activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": True,
     "SERIALIZERS": {

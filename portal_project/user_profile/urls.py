@@ -4,6 +4,6 @@ from .views import UpdateUserProfileView, GetUserProfileView
 # GetUserProfileView,
 
 urlpatterns = [
-    path("user/", GetUserProfileView.as_view()),
+    path("user", GetUserProfileView.as_view()),
     path("update", UpdateUserProfileView.as_view()),
 ]
