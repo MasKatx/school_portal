@@ -5,12 +5,8 @@ from django.contrib.auth.models import (
     BaseUserManager,
 )
 
-from user_profile.models import UserProfile
-
 
 class UserAccountManager(BaseUserManager):
-    """helps django word with our custom user model"""
-
     def create_user(self, email, username, password=None):
         """
         Create a CustomUser with email, name, password and other extra fields
@@ -29,13 +25,12 @@ class UserAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, username, first_name, last_name, password=None):
-        u = self.create_user(email, username, first_name, last_name, password)
+    def create_superuser(self, email, username, password=None):
+        u = self.create_user(email, username, password)
         u.is_staff = True
         u.is_active = True
         u.is_superuser = True
         u.save(using=self._db)
-
         return u
 
 
@@ -51,10 +46,11 @@ class UserAccount(AbstractBaseUser, PermissionsMixin, models.Model):
 
     first_name = models.CharField(max_length=45, blank=True)
     last_name = models.CharField(max_length=45, blank=True)
-
+    be_remove = models.CharField(max_length=255, blank=True)
     objects = UserAccountManager()
+
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email", "first_name", "last_name"]
+    REQUIRED_FIELDS = ["email"]
 
     def __str__(self):
-        return self.email
+        return self.username

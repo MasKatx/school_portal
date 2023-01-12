@@ -43,14 +43,16 @@ INSTALLED_APPS = [
     "rest_framework",
     "djoser",
     "accounts",
-    "user_profile.apps.UserProfileConfig",
+    "portal",
+    "user_profile",
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
 ]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -154,6 +156,7 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("JWT",),
     "ACCESS_TOKEN_TIMELIFE": timedelta(minutes=60),
     "REFRESH_TOKEN_TIMELIFE": timedelta(days=1),
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
 }
 
 
@@ -165,7 +168,7 @@ DJOSER = {
     "SEND_CONFIRMATION_EMAIL": True,
     "SET_USER_NAME_RETYPE": True,
     "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
-    "USERNAME_RESET_CONFIRM_URL": "email/reset/confirm/{uid}/{token}",
+    # "USERNAME_RESET_CONFIRM_URL": "email/reset/confirm/{uid}/{token}",
     "ACTIVATION_URL": "activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": True,
     "SERIALIZERS": {
@@ -193,8 +196,51 @@ EMAIL_HOST_PASSWORD = "vamdwlqxjhejjjrt"
 EMAIL_USE_TLS = True
 
 # cors
-CORS_ORIGIN_WHITELIST = ["http://127.0.0.1:3000"]
+CORS_ORIGIN_WHITELIST = ["http://localhost:3000"]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://127.0.0.1:3000",
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
 ]
+
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "loggers": {
+#         "django": {
+#             "handlers": ["console"],
+#             "level": "INFO",
+#         },
+#         "user_profile": {
+#             "handlers": ["console"],
+#             "level": "DEBUG",
+#         },
+#         "portal": {
+#             "handlers": ["console"],
+#             "level": "DEBUG",
+#         },
+#         "accounts": {
+#             "handlers": ["console"],
+#             "level": "DEBUG",
+#         },
+#     },
+#     "handlers": {
+#         "console": {
+#             "level": "DEBUG",
+#             "class": "logging.StreamHandler",
+#             "formatter": "dev",
+#         },
+#     },
+#     "formatters": {
+#         "dev": {
+#             "format": "\t".join(
+#                 [
+#                     "%(asctime)s",
+#                     "[%(levelname)s]",
+#                     "%(pathname)s(Line:%(lineno)d)",
+#                     "%(message)s",
+#                 ]
+#             )
+#         },
+#     },
+# }
