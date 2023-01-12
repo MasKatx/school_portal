@@ -202,3 +202,45 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://localhost:8000",
 ]
+
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "loggers": {
+#         "django": {
+#             "handlers": ["console"],
+#             "level": "INFO",
+#         },
+#         "user_profile": {
+#             "handlers": ["console"],
+#             "level": "DEBUG",
+#         },
+#         "portal": {
+#             "handlers": ["console"],
+#             "level": "DEBUG",
+#         },
+#         "accounts": {
+#             "handlers": ["console"],
+#             "level": "DEBUG",
+#         },
+#     },
+#     "handlers": {
+#         "console": {
+#             "level": "DEBUG",
+#             "class": "logging.StreamHandler",
+#             "formatter": "dev",
+#         },
+#     },
+#     "formatters": {
+#         "dev": {
+#             "format": "\t".join(
+#                 [
+#                     "%(asctime)s",
+#                     "[%(levelname)s]",
+#                     "%(pathname)s(Line:%(lineno)d)",
+#                     "%(message)s",
+#                 ]
+#             )
+#         },
+#     },
+# }

@@ -24,20 +24,6 @@ class SchoolGroup(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
     sign = models.CharField(max_length=2, blank=True)
-
-    def __str__(self):
-        return self.group_id
-
-
-class GroupInfomation(models.Model):
-    school_group = models.OneToOneField(SchoolGroup, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=20)
-    group_id = models.CharField(
-        max_length=20,
-        unique=True,
-        default=generate_unique_group_id,
-    )
     bio = models.TextField(default="")
 
     def __str__(self):

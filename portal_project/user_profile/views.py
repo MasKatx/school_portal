@@ -15,11 +15,12 @@ from django.http import JsonResponse
 # models
 from accounts.models import UserAccount
 from .models import UserProfile, UserAvatar
-from portal.models import GroupInfomation
+from portal.models import SchoolGroup
 
 # serializer
 from .serializers import UserProfileSerializer, UserAvatarSerializer
 from accounts.models import UserAccount
+from portal.models import SchoolGroup
 
 
 class GetUserProfileView(APIView):
@@ -110,8 +111,9 @@ class GetAllTeachersAccount(APIView):
         user = self.request.user
         users = UserAccount.objects.filter(be_remove=str(user.id))
         for user in users:
-            user_profile = UserProfile.objects.get(user_id=user.id)
+            user_profile = UserProfile.objects.get(id=user.id)
             user_list.append(user_profile)
+        print(user_list)
         teacher_account = UserProfileSerializer(user_list, many=True)
         return JsonResponse(teacher_account.data, safe=False, status=200)
 
@@ -127,17 +129,19 @@ class CreateTeachersAccountView(APIView):
 
             user = self.request.user
             data = self.request.data
-            teacher_birth = data["teacher_birth"]
             teacher_name = data["teacher_name"]
             teacher_phone = data["teacher_phone"]
             teacher_address = data["teacher_address"]
-            teacher_id = data["teacher_id"]
             teacher_library = data["teacher_library"]
             teacher_course = data["teacher_course"]
             teacher_sex = data["teacher_sex"]
+            teacher_birth = data["teacher_birth"]
             email = data["teacher_email"]
+            teacher_belong_to_id = data["teacher_belong_to_id"]
             # first user name
-            f_username = GroupInfomation.objects.get(user_id=user.id).group_id
+            f_username = SchoolGroup.objects.get(
+                user_id=user.id, group_id=teacher_belong_to_id
+            ).group_id
             # last user name
             l_username = UserAccount.objects.filter(be_remove=str(user.id)).count()
             username = f_username + str(l_username)
@@ -147,23 +151,29 @@ class CreateTeachersAccountView(APIView):
             create_user.be_remove = user.id
             create_user.save()
             user = UserAccount.objects.get(username=username)
+            group_name = SchoolGroup.objects.get(
+                group_id=teacher_belong_to_id
+            ).group_name
             user_profile = UserProfile.objects.update_or_create(
-                user_id=user.id,
+                pk=user.id,
                 defaults={
-                    "teacher_birth": teacher_birth,
-                    "teacher_name": teacher_name,
-                    "teacher_phone": teacher_phone,
-                    "teacher_address": teacher_address,
-                    "teacher_id": teacher_id,
+                    "fullname": teacher_name,
+                    "phone": teacher_phone,
+                    "address": teacher_address,
+                    "date_of_birth": teacher_birth,
+                    "teacher_belong_to_name": group_name,
+                    "teacher_belong_to_id": teacher_belong_to_id,
                     "teacher_library": teacher_library,
                     "teacher_course": teacher_course,
                     "teacher_sex": teacher_sex,
+                    "user_type": "2",
                 },
             )
             user_profile = UserProfile.objects.get(user_id=user.id)
             user_profile = UserProfileSerializer(user_profile)
+            print(user_profile)
 
-            return JsonResponse({"success": "created", "profile": user_profile.data})
+            return JsonResponse({"success": "created"})
         except:
             return JsonResponse({"error": "somthing wrong"})
 

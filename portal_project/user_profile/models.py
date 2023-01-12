@@ -21,6 +21,9 @@ class UserAvatar(models.Model):
     def __str__(self):
         return self.user.username
 
+    class Meta:
+        db_table = "user_avatar"
+
 
 # admin profile
 class UserProfile(models.Model):
@@ -28,8 +31,9 @@ class UserProfile(models.Model):
     fullname = models.CharField(max_length=255, blank=True)
     phone = models.CharField(max_length=20, blank=True)
     address = models.CharField(max_length=255, blank=True)
-    date_of_birth = models.DateField(help_text="The date of birth")
-    group_name = models.CharField(max_length=255, blank=True)
+    date_of_birth = models.DateField(
+        help_text="The date of birth", blank=True, null=True
+    )
     teacher_library = models.BooleanField(default=False, blank=True)
     user_types = [
         ("1", "admin"),
@@ -50,6 +54,9 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    class Meta:
+        db_table = "user_profile"
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
