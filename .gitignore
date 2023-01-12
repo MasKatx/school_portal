@@ -1,5 +1,4 @@
-/frontend/*
-/Scripts/*
-/include/*
-/Lib/*
 /pyvenv.cfg
+/Lib/
+/Scripts/
+/Include/
