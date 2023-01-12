@@ -1,4 +1,4 @@
-pyvenv.cfg
+/pyvenv.cfg
 /Lib/
 /Scripts/
 /Include/
