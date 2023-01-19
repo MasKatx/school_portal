@@ -19,8 +19,7 @@ from portal.models import SchoolGroup
 
 # serializer
 from .serializers import UserProfileSerializer, UserAvatarSerializer
-from accounts.models import UserAccount
-from portal.models import SchoolGroup
+from accounts.serializers import UserCreateSerializer
 
 
 class GetUserProfileView(APIView):
@@ -40,7 +39,7 @@ class GetUserProfileView(APIView):
 class UpdateUserProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def put(self, request, format=None):
+    def put(self, request, pk, format=None):
         try:
             user = self.request.user
             user = UserAccount.objects.get(id=user.id)
@@ -52,7 +51,7 @@ class UpdateUserProfileView(APIView):
             group_name = data["group_name"]
             if request.method == "PUT":
                 UserProfile.objects.update_or_create(
-                    user_id=user_id,
+                    id=user_id,
                     defaults={
                         "fullname": manager,
                         "phone": group_phone,
@@ -87,13 +86,13 @@ class UpdateUserAvatarView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
 
-    def put(self, request, format=None):
+    def put(self, request, pk, format=None):
         try:
             user = self.request.user
             user = UserAccount.objects.get(id=user.id)
             avatar = request.data["avatar"]
             UserAvatar.objects.update_or_create(
-                user_id=user.id,
+                user_id=pk,
                 defaults={"avatar": avatar},
             )
             # user_avatar = UserAvatarSerializer(avatar=avatar)
@@ -103,7 +102,7 @@ class UpdateUserAvatarView(APIView):
             return JsonResponse({"error": "something wrong when updating user avatar"})
 
 
-class GetAllTeachersAccount(APIView):
+class GetAllTeachersAccountProfile(APIView):
     permissiom_classes = [IsAuthenticated]
 
     def get(self, request, foramt=None):
@@ -111,18 +110,22 @@ class GetAllTeachersAccount(APIView):
         user = self.request.user
         users = UserAccount.objects.filter(be_remove=str(user.id))
         for user in users:
-            user_profile = UserProfile.objects.get(id=user.id)
+            user_profile = UserProfile.objects.get(user_id=user.id)
             user_list.append(user_profile)
-        print(user_list)
         teacher_account = UserProfileSerializer(user_list, many=True)
         return JsonResponse(teacher_account.data, safe=False, status=200)
 
 
+class GetAllTecherAccount(APIView):
+    def get(self, request, format=None):
+        user = self.request.user
+        users = UserAccount.objects.filter(be_remove=str(user.id))
+        users = UserCreateSerializer(users, many=True)
+        return JsonResponse(users.data, safe=False, status=200)
+
+
 class CreateTeachersAccountView(APIView):
     permission_classes = [IsAuthenticated]
-
-    def get(self, request, format=None):
-        return UserAccount.objects.filter()
 
     def post(self, request, format=None):
         try:
@@ -139,23 +142,70 @@ class CreateTeachersAccountView(APIView):
             email = data["teacher_email"]
             teacher_belong_to_id = data["teacher_belong_to_id"]
             # first user name
+            print(teacher_belong_to_id)
             f_username = SchoolGroup.objects.get(
                 user_id=user.id, group_id=teacher_belong_to_id
-            ).group_id
+            ).sign
             # last user name
             l_username = UserAccount.objects.filter(be_remove=str(user.id)).count()
             username = f_username + str(l_username)
-
             password = teacher_birth.replace("-", "")
             create_user = UserAccount.objects.create_user(email, username, password)
             create_user.be_remove = user.id
+            create_user.email = email
             create_user.save()
             user = UserAccount.objects.get(username=username)
             group_name = SchoolGroup.objects.get(
                 group_id=teacher_belong_to_id
             ).group_name
+            print("ok? 1")
+            UserProfile.objects.update_or_create(
+                user_id=user.id,
+                defaults={
+                    "fullname": teacher_name,
+                    "phone": teacher_phone,
+                    "address": teacher_address,
+                    "date_of_birth": teacher_birth,
+                    "teacher_library": teacher_library,
+                    "teacher_belong_to_name": group_name,
+                    "teacher_belong_to_id": teacher_belong_to_id,
+                    "teacher_course": teacher_course,
+                    "teacher_sex": teacher_sex,
+                    "user_type": "2",
+                },
+            )
+            print("ok?")
+            return JsonResponse({"success": "created"})
+        except:
+            return JsonResponse({"error": "somthing wrong"})
+
+
+class UpdateTeachersAccountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, pk, format=None):
+        try:
+
+            user = self.request.user
+            data = self.request.data
+            teacher_name = data["teacher_name"]
+            print(teacher_name)
+            teacher_phone = data["teacher_phone"]
+            teacher_address = data["teacher_address"]
+            teacher_library = data["teacher_library"]
+            teacher_course = data["teacher_course"]
+            teacher_sex = data["teacher_sex"]
+            teacher_birth = data["teacher_birth"]
+            email = data["teacher_email"]
+            teacher_belong_to_id = data["teacher_belong_to_id"]
+            group_name = SchoolGroup.objects.get(
+                group_id=teacher_belong_to_id
+            ).group_name
+            user = UserAccount.objects.update_or_create(
+                id=pk, defaults={"email": email}
+            )
             user_profile = UserProfile.objects.update_or_create(
-                pk=user.id,
+                id=pk,
                 defaults={
                     "fullname": teacher_name,
                     "phone": teacher_phone,
@@ -169,7 +219,7 @@ class CreateTeachersAccountView(APIView):
                     "user_type": "2",
                 },
             )
-            user_profile = UserProfile.objects.get(user_id=user.id)
+            user_profile = UserProfile.objects.get(id=user.id)
             user_profile = UserProfileSerializer(user_profile)
             print(user_profile)
 
