@@ -158,7 +158,6 @@ class CreateTeachersAccountView(APIView):
             group_name = SchoolGroup.objects.get(
                 group_id=teacher_belong_to_id
             ).group_name
-            print("ok? 1")
             UserProfile.objects.update_or_create(
                 user_id=user.id,
                 defaults={
@@ -174,7 +173,6 @@ class CreateTeachersAccountView(APIView):
                     "user_type": "2",
                 },
             )
-            print("ok?")
             return JsonResponse({"success": "created"})
         except:
             return JsonResponse({"error": "somthing wrong"})
@@ -189,7 +187,6 @@ class UpdateTeachersAccountView(APIView):
             user = self.request.user
             data = self.request.data
             teacher_name = data["teacher_name"]
-            print(teacher_name)
             teacher_phone = data["teacher_phone"]
             teacher_address = data["teacher_address"]
             teacher_library = data["teacher_library"]
@@ -205,7 +202,7 @@ class UpdateTeachersAccountView(APIView):
                 id=pk, defaults={"email": email}
             )
             user_profile = UserProfile.objects.update_or_create(
-                id=pk,
+                user_id=pk,
                 defaults={
                     "fullname": teacher_name,
                     "phone": teacher_phone,
