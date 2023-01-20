@@ -1,5 +1,6 @@
-/pyvenv.cfg
-/Lib/
-/Scripts/
-/Include/
 *.pyc
+/pyvenv.cfg
+/Lib
+/Scripts
+/Include
+portal_project/media
