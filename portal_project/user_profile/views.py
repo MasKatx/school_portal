@@ -116,7 +116,7 @@ class GetAllTeachersAccountProfile(APIView):
         return JsonResponse(teacher_account.data, safe=False, status=200)
 
 
-class GetAllTecherAccount(APIView):
+class GetAllTeachersAccount(APIView):
     def get(self, request, format=None):
         user = self.request.user
         users = UserAccount.objects.filter(be_remove=str(user.id))
@@ -273,6 +273,7 @@ class UpdateTeachersAccountView(APIView):
         )
         print(UserProfile.objects.get(user_id=pk))
         return JsonResponse({"success": "created"})
+
 
 class UpdateUserAccountPassword(APIView):
     permission_classes = [IsAuthenticated]
