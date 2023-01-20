@@ -133,18 +133,19 @@ class DestroySchoolGroupView(APIView):
                 return JsonResponse({"error": "u can not deleted this group"})
 
 
-class TestView(APIView):
-    permission_classes = [IsAuthenticated]
+# テストコード
+# class TestView(APIView):
+#     permission_classes = [IsAuthenticated]
 
-    def get(self, request, str, format=None):
-        user = self.request.user
-        print(str)
-        str = f"{str}".upper()
-        school_group = SchoolGroup.objects.get(group_id=str)
-        school_group_id = school_group.id
-        classes_group = ClassGroup.objects.filter(school_group_id=school_group_id)
-        classes_group = ClassSchoolSerialier(classes_group, many=True)
-        return JsonResponse(classes_group.data, safe=False)
+#     def get(self, request, str, format=None):
+#         user = self.request.user
+#         print(str)
+#         str = f"{str}".upper()
+#         school_group = SchoolGroup.objects.get(group_id=str)
+#         school_group_id = school_group.id
+#         classes_group = ClassGroup.objects.filter(school_group_id=school_group_id)
+#         classes_group = ClassSchoolSerialier(classes_group, many=True)
+#         return JsonResponse(classes_group.data, safe=False)
 
 
 class CreateOrUpdateClassGroupView(APIView):
@@ -186,7 +187,7 @@ class CreateOrUpdateClassGroupView(APIView):
 
         # 1,2,3,4,5,6 データを必須
 
-    # クラスデータを
+    # クラスデータを更新する
     def put(self, request, pk, format=None):
         user = self.request.user
         if check_user_type_type(user) == "1":

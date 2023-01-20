@@ -209,6 +209,7 @@ class UpdateUserAccountPassword(APIView):
         UserAccount.objects.update(pk=pk, defaults={})
 
 
+# 学生アカウントの作成
 class CreateStudentsAccountView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -227,4 +228,5 @@ class CreateStudentsAccountView(APIView):
         student_gender = data["student_gender"]
         student_birth = data["student_birth"]
         student_course = data["student_course"]
+        student_school = data["student_school"]
         email = data["student_email"]
