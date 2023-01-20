@@ -1,4 +1,6 @@
+*.pyc
 /pyvenv.cfg
-/Lib/
-/Scripts/
-/Include/
+/Lib
+/Scripts
+/Include
+/media/covers
