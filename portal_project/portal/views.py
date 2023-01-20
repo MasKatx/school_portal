@@ -84,6 +84,22 @@ class CreateOrUpdateSchoolGroupView(APIView):
             abbreviation = data["abbreviation"]
             abbreviation = f"{abbreviation}".upper()
             try:
+                school_group = SchoolGroup.objects.get(
+                    group_id=group_id, user_id=user.id
+                )
+                profile_belong = UserProfile.objects.filter(
+                    teacher_belong_to_name=school_group.group_name,
+                    teacher_belong_to_id=school_group.group_id,
+                )
+                for i in profile_belong:
+                    print(i, "i")
+                    print(i, i.teacher_belong_to_name, "name")
+                    print(i, i.teacher_belong_to_id, "id")
+                    i.teacher_belong_to_name = group_name
+                    i.teacher_belong_to_id = group_id
+                    i.save()
+
+                # profile_belong.teacher_belong_to_name = group_name
                 SchoolGroup.objects.update_or_create(
                     pk=pk,
                     defaults={
@@ -94,9 +110,7 @@ class CreateOrUpdateSchoolGroupView(APIView):
                         "sign": abbreviation,
                     },
                 )
-                school_group = SchoolGroup.objects.get(
-                    group_id=group_id, user_id=user.id
-                )
+
                 school_group = SchoolGroupSerializer(school_group)
                 return JsonResponse(school_group.data)
             except:
