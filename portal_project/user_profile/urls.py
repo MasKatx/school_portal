@@ -8,6 +8,7 @@ from .views import (
     DeleteTeachersAccountView,
     UpdateTeachersAccountView,
     CreateStudentsAccountView,
+    DeleteStudentAccountView,
     GetAllTeachersAccountProfile,
     GetAllTeachersAccount,
 )
@@ -25,5 +26,6 @@ urlpatterns = [
     path("update_teacher_account/<int:pk>", UpdateTeachersAccountView.as_view()),
     path("delete_teacher_account/<int:pk>", DeleteTeachersAccountView.as_view()),
     path("create_student_account", CreateStudentsAccountView.as_view()),
+    path("delete_student_account", DeleteStudentAccountView.as_view()),
     # path("csrf_cookie", GetCSRFToken.as_view()),
 ]

@@ -303,3 +303,22 @@ class CreateStudentsAccountView(APIView):
         student_course = data["student_course"]
         student_school = data["student_school"]
         email = data["student_email"]
+
+# 学生アカウントの削除
+def check_user_type(user):
+    user_profile = UserAccount.objects.get(id=user.id)
+    return user_profile.user_type
+class DeleteStudentAccountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    # get, put, post, delete
+    def delete(self, request, pk, format=None):
+        user = self.request.user
+        if check_user_type(user) == "2":
+            user_will_be_deleted = UserAccount.objects.get(
+                pk=pk, be_remove=f"{user.id}"
+            )
+            user_will_be_deleted.delete()
+            return JsonResponse({"success": f"{user}を消しました。"})
+        else:
+            return JsonResponse({"error": f"{user}を消すことはできません。"})
