@@ -7,9 +7,9 @@ from .views import (
     CreateTeachersAccountView,
     DeleteTeachersAccountView,
     UpdateTeachersAccountView,
-    GetAllTeachersAccount,
     CreateStudentsAccountView,
     GetAllTeachersAccountProfile,
+    GetAllTeachersAccount,
 )
 
 # GetUserProfileView,
