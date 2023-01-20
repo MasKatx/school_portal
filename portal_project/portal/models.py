@@ -28,3 +28,30 @@ class SchoolGroup(models.Model):
 
     def __str__(self):
         return self.group_id
+
+
+# Group内のクラスのmodelsを作る
+# admin page -> クラスを作ってみる
+# apiで作ったクラスのデータを取り出す get
+# apiでアップデートする -> pk, put
+# apiでクラスを作る create(post) def post
+# apiでクラスを削除する delete
+
+
+class ClassGroup(models.Model):
+    school_group = models.ForeignKey(SchoolGroup, on_delete=models.CASCADE)
+    # また次回説明を受けるコード
+    class_name = models.CharField(max_length=255)
+    class_studentnumber = models.IntegerField(blank=True)
+    class_course = models.CharField(max_length=255)
+
+    # クラスマネージャーはユーザー(教員のデータ)を呼び出して選択出来たら良いのではないか？
+    # (クラスグループでスクールグループを呼び出しているように)
+    # コードが分からないため自分で調べてはいるが分からないので聞く
+    # class_manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    class_manager = models.CharField(max_length=255)
+    class_submanager = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return self.class_name
