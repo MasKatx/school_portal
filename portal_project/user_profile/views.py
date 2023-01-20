@@ -116,7 +116,7 @@ class GetAllTeachersAccountProfile(APIView):
         return JsonResponse(teacher_account.data, safe=False, status=200)
 
 
-class GetAllTecherAccount(APIView):
+class GetAllTeachersAccount(APIView):
     def get(self, request, format=None):
         user = self.request.user
         users = UserAccount.objects.filter(be_remove=str(user.id))
@@ -272,11 +272,16 @@ class CreateStudentsAccountView(APIView):
         user = self.request.user
         data = self.request.data
         student_name = data["student_name"]
-        student_number = data["student_number"]
+        student_id = data["student_id"]
         student_phone = data["student_phone"]
         student_address = data["student_address"]
         student_gender = data["student_gender"]
         student_birth = data["student_birth"]
         student_course = data["student_course"]
-        student_school = data["student_school"]
+        student_school_id = data["student_school_id"]
+        student_class_id = data["student_class_id"]
         email = data["student_email"]
+        # school_id = SchoolGroup.objects.get(
+        #     school = student_school_id
+        # ).school_id
+        # user = UserAccount.objects.
