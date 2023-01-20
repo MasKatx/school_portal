@@ -8,7 +8,7 @@ from .views import (
     DeleteTeachersAccountView,
     UpdateTeachersAccountView,
     GetAllTeachersAccountProfile,
-    GetAllTecherAccount,
+    GetAllTechersAccount,
 )
 
 # GetUserProfileView,
@@ -18,7 +18,7 @@ urlpatterns = [
     path("user_update", UpdateUserProfileView.as_view()),
     path("user_avatar", GetUserAvatarView.as_view()),
     path("user_avatar_update/<int:pk>", UpdateUserAvatarView.as_view()),
-    path("get_all_teacher", GetAllTecherAccount.as_view()),
+    path("get_all_teacher", GetAllTechersAccount.as_view()),
     path("get_all_teacher_account", GetAllTeachersAccountProfile.as_view()),
     path("create_teacher_account", CreateTeachersAccountView.as_view()),
     path("update_teacher_account/<int:pk>", UpdateTeachersAccountView.as_view()),
