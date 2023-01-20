@@ -243,7 +243,6 @@ class DeleteTeachersAccountView(APIView):
 
 class UpdateTeachersAccountView(APIView):
     def put(self, request, pk, format=None):
-        # try:
         data = self.request.data
         user = self.request.user
         teacher_name = data["teacher_name"]
@@ -275,5 +274,31 @@ class UpdateTeachersAccountView(APIView):
         print(UserProfile.objects.get(user_id=pk))
         return JsonResponse({"success": "created"})
 
-    # except:
-    #     return JsonResponse({"error": "somthing wrong"})
+class UpdateUserAccountPassword(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, pk, format=None):
+        user = self.request.user
+        data = self.request.data
+        UserAccount.objects.update(pk=pk, defaults={})
+
+
+# 学生アカウントの作成
+class CreateStudentsAccountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        return UserAccount.objects.filter()
+
+    def post(self, request, format=None):
+        user = self.request.user
+        data = self.request.data
+        student_name = data["student_name"]
+        student_number = data["student_number"]
+        student_phone = data["student_phone"]
+        student_address = data["student_address"]
+        student_gender = data["student_gender"]
+        student_birth = data["student_birth"]
+        student_course = data["student_course"]
+        student_school = data["student_school"]
+        email = data["student_email"]

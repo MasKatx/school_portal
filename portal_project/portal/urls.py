@@ -3,6 +3,8 @@ from .views import (
     SchoolGroupView,
     CreateOrUpdateSchoolGroupView,
     DestroySchoolGroupView,
+    # TestView,
+    CreateOrUpdateClassGroupView,
 )
 
 # GetUserProfileView,
@@ -15,4 +17,6 @@ urlpatterns = [
         "delete_group/<int:pk>",
         DestroySchoolGroupView.as_view(),
     ),
+    # path("test/<path:str>", TestView.as_view()),
+    path("create/create_class", CreateOrUpdateClassGroupView.as_view()),
 ]
