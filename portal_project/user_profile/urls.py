@@ -10,6 +10,7 @@ from .views import (
     CreateStudentsAccountView,
     GetAllTeachersAccountProfile,
     GetAllTeachersAccount,
+    GetAllTeacherAvatarByAdmin,
 )
 
 # GetUserProfileView,
@@ -18,6 +19,7 @@ urlpatterns = [
     path("user", GetUserProfileView.as_view()),
     path("user_update", UpdateUserProfileView.as_view()),
     path("user_avatar", GetUserAvatarView.as_view()),
+    path("get_all_teacher_avt", GetAllTeacherAvatarByAdmin.as_view()),
     path("user_avatar_update/<int:pk>", UpdateUserAvatarView.as_view()),
     path("get_all_teacher", GetAllTeachersAccount.as_view()),
     path("get_all_teacher_account", GetAllTeachersAccountProfile.as_view()),
