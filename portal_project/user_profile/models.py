@@ -51,6 +51,7 @@ class UserProfile(models.Model):
     teacher_belong_to_id = models.CharField(max_length=255, blank=True)
     teacher_belong_to_name = models.CharField(max_length=255, blank=True)
     teacher_course = models.CharField(max_length=255, blank=True)
+    # student profile
 
     def __str__(self):
         return self.user.username
