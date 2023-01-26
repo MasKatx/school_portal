@@ -383,4 +383,3 @@ class ShowStudentAccountsView(APIView):
         studentaccounts_id = UserProfileSerializer(studentaccounts, many=True)
         print(str)
         return JsonResponse(studentaccounts_id.data, safe=False)
->>>>>>> 7e527447173e72f7e8f16870656da4a3df027e98
