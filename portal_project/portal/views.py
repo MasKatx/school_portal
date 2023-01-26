@@ -210,3 +210,9 @@ class CreateOrUpdateClassGroupView(APIView):
             group_id = data["group_id"]
             group_id = f"{group_id}".upper()
             group_id = SchoolGroup.objects.get(group_id=group_id)
+
+
+# 掲示板の更新
+
+
+# 掲示板の削除
