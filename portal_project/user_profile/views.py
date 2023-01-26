@@ -314,27 +314,6 @@ class CreateStudentsAccountView(APIView):
         teacher_belong_to_id = data["teacher_belong_to_id"]
         student_school = data["student_school"]
         email = data["student_email"]
-<<<<<<< HEAD
-
-# 学生アカウントの削除
-def check_user_type(user):
-    user_profile = UserAccount.objects.get(id=user.id)
-    return user_profile.user_type
-class DeleteStudentAccountView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    # get, put, post, delete
-    def delete(self, request, pk, format=None):
-        user = self.request.user
-        if check_user_type(user) == "2":
-            user_will_be_deleted = UserAccount.objects.get(
-                pk=pk, be_remove=f"{user.id}"
-            )
-            user_will_be_deleted.delete()
-            return JsonResponse({"success": f"{user}を消しました。"})
-        else:
-            return JsonResponse({"error": f"{user}を消すことはできません。"})
-=======
         print(teacher_belong_to_id)
         print(data)
         f_username = SchoolGroup.objects.get(
@@ -367,6 +346,28 @@ class DeleteStudentAccountView(APIView):
             },
         )
         return JsonResponse({"success": "created Student Account"})
+
+
+# 学生アカウントの削除
+def check_user_type(user):
+    user_profile = UserProfile.objects.get(user_id=user.id)
+    return user_profile.user_type
+class DeleteStudentAccountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    # get, put, post, delete
+    def delete(self, request, pk, format=None):
+        user = self.request.user
+        # 先生 => be_remove, username, email....
+        if check_user_type(user) == "2":
+            user_will_be_deleted = UserAccount.objects.get(
+                pk=pk, be_remove= user.be_remove
+            )
+            user_will_be_deleted.delete()
+            return JsonResponse({"success": f"{user}を消しました。"})
+        else:
+            return JsonResponse({"error": f"{user}を消すことはできません。"})
+
 
     # except:
     #     return JsonResponse({"error": "don`t create Account"})
