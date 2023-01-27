@@ -3,6 +3,6 @@
 /Lib
 /Scripts
 /Include
-portal_project/media
+portal_project/media/covers
 __pycache__
 migrations
