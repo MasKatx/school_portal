@@ -9,10 +9,14 @@ from user_profile.models import UserProfile
 from django.http import JsonResponse
 
 # import models
-from .models import SchoolGroup, ClassGroup
+from .models import SchoolGroup, ClassGroup, PostModels
 
 # import models serializer
-from .serializers import SchoolGroupSerializer, ClassSchoolSerialier
+from .serializers import (
+    SchoolGroupSerializer,
+    ClassSchoolSerialier,
+    PostModelsSerialier,
+)
 
 
 def check_user_type_type(user):
@@ -212,7 +216,39 @@ class CreateOrUpdateClassGroupView(APIView):
             group_id = SchoolGroup.objects.get(group_id=group_id)
 
 
-# 掲示板の更新
+# 掲示板の作成
+class CreateorUpdatePostView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    # データの取得
+    def get(self, request, format=None):
+        post_models = PostModels.objects.all()
+        post_models = PostModelsSerialier(post_models, many=True)
+        return JsonResponse(post_models.data, safe=False)
+
+    # 掲示板を作成
+    def post(self, request, format=None):
+        data = self.request.data
+        user = self.request.user
+        post_title = data["post_title"]
+        content = data["content"]
+        created_by_id = data["created_by_id"]
+        group_id = data["group_id"]
+        group_id = SchoolGroup.objects.get(group_id=group_id)
+        PostModels.objects.create(
+            user=group_id,
+            title=post_title,
+            content=content,
+            created_by_id=created_by_id,
+        )
+
+        school_post = SchoolGroup.objects.get(group_id=group_id)
+        school_post = SchoolGroupSerializer(school_post)
+
+        # return JsonResponse(school_post.data, safe=True)
+        return JsonResponse({"success": "Created New Post!"})
+
+    # 掲示板の更新
 
 
 # 掲示板の削除
