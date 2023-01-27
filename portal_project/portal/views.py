@@ -228,27 +228,54 @@ class CreateorUpdatePostView(APIView):
 
     # 掲示板を作成
     def post(self, request, format=None):
-        data = self.request.data
-        user = self.request.user
-        post_title = data["post_title"]
-        content = data["content"]
-        created_by_id = data["created_by_id"]
-        group_id = data["group_id"]
-        group_id = SchoolGroup.objects.get(group_id=group_id)
-        PostModels.objects.create(
-            user=group_id,
-            title=post_title,
-            content=content,
-            created_by_id=created_by_id,
-        )
+        try:
+            data = self.request.data
+            user = self.request.user
+            post_title = data["post_title"]
+            content = data["content"]
+            created_by_id = data["created_by_id"]
+            group_id = data["group_id"]
+            group_id = SchoolGroup.objects.get(group_id=group_id)
+            PostModels.objects.create(
+                user=group_id,
+                title=post_title,
+                content=content,
+                created_by_id=created_by_id,
+            )
 
-        school_post = SchoolGroup.objects.get(group_id=group_id)
-        school_post = SchoolGroupSerializer(school_post)
+            school_post = SchoolGroup.objects.get(group_id=group_id)
+            school_post = SchoolGroupSerializer(school_post)
 
-        # return JsonResponse(school_post.data, safe=True)
-        return JsonResponse({"success": "Created New Post!"})
+            # return JsonResponse(school_post.data, safe=True)
+            return JsonResponse({"success": "Created New Post!"})
+        except:
+            return JsonResponse({"error": "Not Create New Post..."})
 
     # 掲示板の更新
+    # put --> 更新する
+    # 参考になるかもしれないコード
+    # portal/views.py(今いるファイル) 204~216行目
+    def put(self, request, str, format=None):
+        pass
 
 
 # 掲示板の削除
+# delete --> 削除する
+# 参考になるかもしれないコード
+# portal/views.py(今いるファイル) 139~147行目
+class DeletePostView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, str, format=None):
+        pass
+
+
+# 掲示板の閲覧
+class ShowPostView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, str, format=None):
+        user = self.request.user
+        create_content = PostModels.objects.filter(created_by_id=str)
+        create_content_id = PostModelsSerialier(create_content, many=True)
+        return JsonResponse(create_content_id.data, safe=False)
