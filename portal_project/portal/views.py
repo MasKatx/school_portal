@@ -29,6 +29,7 @@ class SchoolGroupView(APIView):
             user = self.request.user
             if check_user_type_type(user) == "1":
                 school_group = SchoolGroup.objects.filter(user_id=user.id)
+                school_group = school_group.order_by("id")
                 school_group = SchoolGroupSerializer(school_group, many=True)
                 # return JsonResponse({"access": "ok"})
                 return JsonResponse(school_group.data, safe=False)
@@ -68,7 +69,6 @@ class CreateOrUpdateSchoolGroupView(APIView):
 
                     school_group = SchoolGroupSerializer(school_group)
                     return JsonResponse(school_group.data)
-                    # return JsonResponse(school_group.data)
             except:
                 return JsonResponse(
                     {"error": "its exists before try to orther group id?"}
@@ -210,3 +210,9 @@ class CreateOrUpdateClassGroupView(APIView):
             group_id = data["group_id"]
             group_id = f"{group_id}".upper()
             group_id = SchoolGroup.objects.get(group_id=group_id)
+
+
+# 掲示板の更新
+
+
+# 掲示板の削除

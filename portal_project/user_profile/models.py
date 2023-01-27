@@ -4,13 +4,10 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# others
-import string
-import random
 
-
-def upload_path(instance, filname):
-    return "/".join(["covers", str(instance.user.username), filname])
+def upload_path(instance, filename):
+    print(instance.user.username)
+    return "/".join(["covers", str(instance.user.username), filename])
 
 
 class UserAvatar(models.Model):
@@ -51,6 +48,13 @@ class UserProfile(models.Model):
     teacher_belong_to_id = models.CharField(max_length=255, blank=True)
     teacher_belong_to_name = models.CharField(max_length=255, blank=True)
     teacher_course = models.CharField(max_length=255, blank=True)
+    
+    # 学生情報
+    student_id = models.CharField(max_length=30, blank=True)
+    school_id = models.CharField(max_length=255, blank=True)
+    student_class_name = models.CharField(max_length=5, blank=True)
+    student_fullname_furigana = models.CharField(max_length=255, blank=True)
+    student_post_num = models.CharField(max_length=10, blank=True)
 
     def __str__(self):
         return self.user.username
