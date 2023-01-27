@@ -42,6 +42,20 @@ class GetUserProfileView(APIView):
             return JsonResponse({"value": "error"})
 
 
+class GetAdminProfile(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        try:
+            user = self.request.user
+            admin = UserAccount.objects.get(id=int(user.be_remove))
+            admin = UserProfile.objects.get(user_id=admin.id)
+            admin = UserProfileSerializer(admin)
+            return JsonResponse(admin.data)
+        except:
+            return JsonResponse({"value": "error"})
+
+
 class UpdateUserProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -51,10 +65,11 @@ class UpdateUserProfileView(APIView):
             user = UserAccount.objects.get(id=user.id)
             user_id = user.id
             data = self.request.data
-            manager = data["manager"]
-            group_phone = data["group_phone"]
-            group_address = data["group_address"]
-            group_name = data["group_name"]
+            manager = data["fullname"]
+            group_phone = data["phone"]
+            group_address = data["address"]
+            group_name = data["all_group_name"]
+            print(data)
             if request.method == "PUT":
                 UserProfile.objects.update_or_create(
                     id=user_id,
@@ -62,7 +77,7 @@ class UpdateUserProfileView(APIView):
                         "fullname": manager,
                         "phone": group_phone,
                         "address": group_address,
-                        "group_name": group_name,
+                        "all_group_name": group_name,
                     },
                 )
                 user_profile = UserProfile.objects.get(user_id=user_id)
@@ -93,8 +108,10 @@ class UpdateUserAvatarView(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def put(self, request, pk, format=None):
+        print(pk)
         try:
             avatar = request.data["avatar"]
+            print(avatar)
             UserAvatar.objects.update_or_create(
                 user_id=pk,
                 defaults={"avatar": avatar},
@@ -175,6 +192,7 @@ class CreateTeachersAccountView(APIView):
             },
         )
         return JsonResponse({"success": "created"})
+
 
 class UpdateTeachersAccountView(APIView):
     def put(self, request, pk, format=None):
@@ -300,6 +318,8 @@ class CreateStudentsAccountView(APIView):
 def check_user_type(user):
     user_profile = UserProfile.objects.get(user_id=user.id)
     return user_profile.user_type
+
+
 class DeleteStudentAccountView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -309,13 +329,12 @@ class DeleteStudentAccountView(APIView):
         # 先生 => be_remove, username, email....
         if check_user_type(user) == "2":
             user_will_be_deleted = UserAccount.objects.get(
-                pk=pk, be_remove= user.be_remove
+                pk=pk, be_remove=user.be_remove
             )
             user_will_be_deleted.delete()
             return JsonResponse({"success": f"{user}を消しました。"})
         else:
             return JsonResponse({"error": f"{user}を消すことはできません。"})
-
 
     # except:
     #     return JsonResponse({"error": "don`t create Account"})
