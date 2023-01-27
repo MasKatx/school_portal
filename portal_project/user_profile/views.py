@@ -16,7 +16,7 @@ from django.http import JsonResponse
 # models
 from accounts.models import UserAccount
 from .models import UserProfile, UserAvatar
-from portal.models import SchoolGroup
+from portal.models import SchoolGroup, ClassGroup
 
 # serializer
 from .serializers import UserProfileSerializer, UserAvatarSerializer
@@ -94,13 +94,11 @@ class UpdateUserAvatarView(APIView):
 
     def put(self, request, pk, format=None):
         try:
-            avatar = self.request.data["avatar"]
-            print(avatar)
+            avatar = request.data["avatar"]
             UserAvatar.objects.update_or_create(
                 user_id=pk,
                 defaults={"avatar": avatar},
             )
-            print("update")
             return JsonResponse({"success": "img was updated"}, status=200)
         except:
             return JsonResponse({"error": "something wrong when updating user avatar"})
@@ -113,7 +111,6 @@ class GetAllTeachersAccountProfile(APIView):
         user_list = []
         user = self.request.user
         users = UserAccount.objects.filter(be_remove=str(user.id))
-        users = users.order_by("id")
         for user in users:
             user_profile = UserProfile.objects.get(user_id=user.id)
             user_list.append(user_profile)
@@ -179,7 +176,6 @@ class CreateTeachersAccountView(APIView):
         )
         return JsonResponse({"success": "created"})
 
-
 class UpdateTeachersAccountView(APIView):
     def put(self, request, pk, format=None):
         user = self.request.user
@@ -219,6 +215,7 @@ class DeleteTeachersAccountView(APIView):
     def delete(self, request, pk, format=None):
         try:
             user = self.request.user
+            print(pk)
             user_will_be_deleted = UserAccount.objects.get(
                 pk=pk, be_remove=f"{user.id}"
             )
@@ -249,14 +246,89 @@ class CreateStudentsAccountView(APIView):
         return UserAccount.objects.filter()
 
     def post(self, request, format=None):
+        # try:
+
         user = self.request.user
         data = self.request.data
         student_name = data["student_name"]
-        student_number = data["student_number"]
         student_phone = data["student_phone"]
         student_address = data["student_address"]
         student_gender = data["student_gender"]
         student_birth = data["student_birth"]
-        student_course = data["student_course"]
+        student_name_furigana = data["student_name_furigana"]
+        student_post_num = data["student_post_num"]
+        student_school_id = data["student_school_id"]
+        student_class_id = data["student_class_id"]
+        teacher_belong_to_id = data["teacher_belong_to_id"]
         student_school = data["student_school"]
         email = data["student_email"]
+        print(teacher_belong_to_id)
+        print(data)
+        f_username = SchoolGroup.objects.get(
+            user_id=user.id, group_id=teacher_belong_to_id
+        ).sign
+
+        l_username = UserAccount.objects.filter(be_remove=str(user.id)).count()
+        username = f_username + str(l_username)
+        password = student_birth.replace("-", "")
+        create_user = UserAccount.objects.create_user(email, username, password)
+        create_user.be_remove = user.id
+        create_user.save()
+        user = UserAccount.objects.get(username=username)
+        UserProfile.objects.update_or_create(
+            user_id=user.id,
+            defaults={
+                "email": email,
+                "fullname": student_name,
+                "phone": student_phone,
+                "address": student_address,
+                "date_of_birth": student_birth,
+                "teacher_sex": student_gender,
+                "teacher_belong_to_id": teacher_belong_to_id,
+                "student_id": student_school_id,
+                "school_id": student_school,
+                "student_class": student_class_id,
+                "student_fullname_furigana": student_name_furigana,
+                "student_post_num": student_post_num,
+                "user_type": "3",
+            },
+        )
+        return JsonResponse({"success": "created Student Account"})
+
+
+# 学生アカウントの削除
+def check_user_type(user):
+    user_profile = UserProfile.objects.get(user_id=user.id)
+    return user_profile.user_type
+class DeleteStudentAccountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    # get, put, post, delete
+    def delete(self, request, pk, format=None):
+        user = self.request.user
+        # 先生 => be_remove, username, email....
+        if check_user_type(user) == "2":
+            user_will_be_deleted = UserAccount.objects.get(
+                pk=pk, be_remove= user.be_remove
+            )
+            user_will_be_deleted.delete()
+            return JsonResponse({"success": f"{user}を消しました。"})
+        else:
+            return JsonResponse({"error": f"{user}を消すことはできません。"})
+
+
+    # except:
+    #     return JsonResponse({"error": "don`t create Account"})
+
+
+# 学生アカウント一覧
+class ShowStudentAccountsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, str, format=None):
+        user = self.request.user
+        str = f"{str}".upper()
+        studentaccounts = UserProfile.objects.filter(teacher_belong_to_id=str)
+        studentaccounts_id = UserProfileSerializer(studentaccounts, many=True)
+        print(str)
+        return JsonResponse(studentaccounts_id.data, safe=False)
