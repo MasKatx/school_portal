@@ -4,3 +4,5 @@
 /Scripts
 /Include
 portal_project/media
+__pycache__
+migrations

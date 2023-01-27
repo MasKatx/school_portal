@@ -4,13 +4,10 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# others
-import string
-import random
 
-
-def upload_path(instance, filname):
-    return "/".join(["covers", str(instance.user.username), filname])
+def upload_path(instance, filename):
+    print(instance.user.username)
+    return "/".join(["covers", str(instance.user.username), filename])
 
 
 class UserAvatar(models.Model):
