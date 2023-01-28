@@ -51,8 +51,8 @@ class UserProfile(models.Model):
     teacher_course = models.CharField(max_length=255, blank=True)
 
     # 学生情報
-    student_id = models.CharField(max_length=30, blank=True)
-    school_id = models.CharField(max_length=255, blank=True)
+    student_field_name = models.CharField(max_length=255, blank=True)
+    student_department_name = models.CharField(max_length=255, blank=True)
     student_class_name = models.CharField(max_length=5, blank=True)
     student_fullname_furigana = models.CharField(max_length=255, blank=True)
     student_post_num = models.CharField(max_length=10, blank=True)

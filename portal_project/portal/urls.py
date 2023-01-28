@@ -4,9 +4,13 @@ from .views import (
     CreateOrUpdateSchoolGroupView,
     DestroySchoolGroupView,
     # TestView,
-    CreateOrUpdateClassGroupView,
     CreateorUpdatePostView,
+    GetClassSchool,
+    CreateClassSchool,
+    UpdateClassSchool,
+    DeleteClassSchool,
 )
+
 
 # GetUserProfileView,
 
@@ -19,6 +23,9 @@ urlpatterns = [
         DestroySchoolGroupView.as_view(),
     ),
     # path("test/<path:str>", TestView.as_view()),
-    path("create/create_class", CreateOrUpdateClassGroupView.as_view()),
     path("create/post", CreateorUpdatePostView.as_view()),
+    path("get_class", GetClassSchool.as_view()),
+    path("create_class", CreateClassSchool.as_view()),
+    path("update_class/<int:pk>", UpdateClassSchool.as_view()),
+    path("delete_class/<int:pk>", DeleteClassSchool.as_view()),
 ]

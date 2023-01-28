@@ -280,8 +280,6 @@ class CreateStudentsAccountView(APIView):
         teacher_belong_to_id = data["teacher_belong_to_id"]
         student_school = data["student_school"]
         email = data["student_email"]
-        print(teacher_belong_to_id)
-        print(data)
         f_username = SchoolGroup.objects.get(
             user_id=user.id, group_id=teacher_belong_to_id
         ).sign
