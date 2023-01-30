@@ -69,7 +69,7 @@
 
 - Amazon EC2
 - AWS EIP
-- [ ]Amazon Route 53: 検討中
+- Amazon Route 53: 検討中
 - Gunicorn
 - nginx
 
