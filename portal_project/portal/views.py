@@ -15,7 +15,7 @@ from .models import SchoolGroup, ClassGroup, PostModels
 from .serializers import (
     SchoolGroupSerializer,
     ClassSchoolSerialier,
-    PostModelsSerialier,
+    PostModelsSerializer,
 )
 
 
@@ -282,6 +282,11 @@ class UpdateClassSchool(APIView):
     # except:
     #     return JsonResponse({"error": "somthing wrong right here"})
 
+    # データの取得
+    def get(self, request, format=None):
+        post_models = PostModels.objects.all()
+        post_models = PostModelsSerializer(post_models, many=True)
+        return JsonResponse(post_models.data, safe=False)
 
 class DeleteClassSchool(APIView):
     def delete(self, request, pk, format=None):
@@ -296,15 +301,24 @@ class DeleteClassSchool(APIView):
 
 
 # 掲示板の削除
-# delete --> 削除する
-# 参考になるかもしれないコード
-# portal/views.py(今いるファイル) 139~147行目
-class DeletePostView(APIView):
+class DestroyPostView(APIView):
+    serializer_class = PostModelsSerializer
     permission_classes = [IsAuthenticated]
 
-    def delete(self, request, str, format=None):
-        pass
+    def get(self, request, format=None):
+        post_models = PostModels.objects.all()
+        post_models = PostModelsSerializer(post_models, many=True)
+        return JsonResponse(post_models.data, safe=False)
 
+    def delete(self, request, group_id, format=None):
+        user = self.request.user
+        if check_user_type_type(user) == "2":
+            try:
+                post_models = SchoolGroup.objects.get(group_id=group_id)
+                post_models.delete()
+                return JsonResponse({"success": "post be deleted"})
+            except:
+                return JsonResponse({"error": "u can not deleted this post"})
 
 # 掲示板の閲覧
 class ShowPostView(APIView):
