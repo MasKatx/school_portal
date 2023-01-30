@@ -1,11 +1,11 @@
 # Edify ～学校ポータルシステム～
 
-![Edify](./linkedin_banner_image_1.png "Edify")
+![Edify](./portal_project/media/logos/linkedin_banner_image_1.png "Edify")
 
 ## 概要
 
 **「学校機能をこの１つに」** をコンセプトに開発した、学校ポータルシステムです。  
-リンクはこちら > [Edify]()(まだデプロイされていません)
+リンクはこちら > [Edify](https://www.sampleeeeee.com)(まだデプロイされていません)
 
 ## 企画～設計
 
