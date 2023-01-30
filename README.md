@@ -1,4 +1,4 @@
-# Edify ~学校ポータルシステム~
+# Edify ～学校ポータルシステム～
 
 ![Edify](./linkedin_banner_image_1.png "Edify")
 
@@ -69,7 +69,7 @@
 
 - Amazon EC2
 - AWS EIP
-- (Amazon Route 53: 検討中)
+- [ ]Amazon Route 53: 検討中
 - Gunicorn
 - nginx
 
