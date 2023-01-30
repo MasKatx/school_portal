@@ -15,7 +15,7 @@ from .models import SchoolGroup, ClassGroup, PostModels
 from .serializers import (
     SchoolGroupSerializer,
     ClassSchoolSerialier,
-    PostModelsSerialier,
+    PostModelsSerializer,
 )
 
 
@@ -223,7 +223,7 @@ class CreateorUpdatePostView(APIView):
     # データの取得
     def get(self, request, format=None):
         post_models = PostModels.objects.all()
-        post_models = PostModelsSerialier(post_models, many=True)
+        post_models = PostModelsSerializer(post_models, many=True)
         return JsonResponse(post_models.data, safe=False)
 
     # 掲示板を作成
@@ -252,3 +252,21 @@ class CreateorUpdatePostView(APIView):
 
 
 # 掲示板の削除
+class DestroyPostView(APIView):
+    serializer_class = PostModelsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        post_models = PostModels.objects.all()
+        post_models = PostModelsSerializer(post_models, many=True)
+        return JsonResponse(post_models.data, safe=False)
+
+    def delete(self, request, group_id, format=None):
+        user = self.request.user
+        if check_user_type_type(user) == "2":
+            try:
+                post_models = SchoolGroup.objects.get(group_id=group_id)
+                post_models.delete()
+                return JsonResponse({"success": "post be deleted"})
+            except:
+                return JsonResponse({"error": "u can not deleted this post"})

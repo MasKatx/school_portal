@@ -6,6 +6,7 @@ from .views import (
     # TestView,
     CreateOrUpdateClassGroupView,
     CreateorUpdatePostView,
+    DestroyPostView,
 )
 
 # GetUserProfileView,
@@ -21,4 +22,5 @@ urlpatterns = [
     # path("test/<path:str>", TestView.as_view()),
     path("create/create_class", CreateOrUpdateClassGroupView.as_view()),
     path("create/post", CreateorUpdatePostView.as_view()),
+    path("delete/<int:pk>", DestroyPostView.as_view()),
 ]
