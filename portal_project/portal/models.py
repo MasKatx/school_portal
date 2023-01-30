@@ -48,7 +48,7 @@ class ClassGroup(models.Model):
 # その次にviewsにAPI接続できるように頑張る
 # 掲示板
 class PostModels(models.Model):
-    user = models.OneToOneField(SchoolGroup, on_delete=models.CASCADE)
+    user = models.ForeignKey(SchoolGroup, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = models.TextField()
     created = models.DateTimeField(auto_now_add=True)

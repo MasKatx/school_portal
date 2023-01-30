@@ -22,8 +22,8 @@ class UserAvatar(models.Model):
         db_table = "user_avatar"
 
 
-# admin profile
 class UserProfile(models.Model):
+    # admin profile
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     fullname = models.CharField(max_length=255, blank=True)
     phone = models.CharField(max_length=20, blank=True)
@@ -31,6 +31,7 @@ class UserProfile(models.Model):
     date_of_birth = models.DateField(
         help_text="The date of birth", blank=True, null=True
     )
+    all_group_name = models.CharField(max_length=255, blank=True)
     teacher_library = models.BooleanField(default=False, blank=True)
     user_types = [
         ("1", "admin"),
@@ -48,7 +49,7 @@ class UserProfile(models.Model):
     teacher_belong_to_id = models.CharField(max_length=255, blank=True)
     teacher_belong_to_name = models.CharField(max_length=255, blank=True)
     teacher_course = models.CharField(max_length=255, blank=True)
-    
+
     # 学生情報
     student_id = models.CharField(max_length=30, blank=True)
     school_id = models.CharField(max_length=255, blank=True)
