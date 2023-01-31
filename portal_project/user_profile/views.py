@@ -254,12 +254,12 @@ class GetAllTeacherAvatarByAdmin(APIView):
         try:
             user = self.request.user
             users = UserAccount.objects.filter(be_remove=user.id).order_by("id")
-            student_avt_list = []
+            teacher_avt_list = []
             for user in users:
                 if check_user_type(user) == "2":
                     user_avt = UserAvatar.objects.get(user_id=user.id)
-                    student_avt_list.append(user_avt)
-            users_avatar = UserAvatarSerializer(student_avt_list, many=True)
+                    teacher_avt_list.append(user_avt)
+            users_avatar = UserAvatarSerializer(teacher_avt_list, many=True)
             return JsonResponse(users_avatar.data, safe=False)
 
         except:
