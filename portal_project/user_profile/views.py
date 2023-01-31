@@ -273,60 +273,56 @@ class CreateStudentsAccountView(APIView):
     def post(self, request, format=None):
         try:
 
-            user = self.request.user
-            data = self.request.data
-            student_name = data["fullname"]
-            student_phone = data["phone"]
-            student_address = data["address"]
-            student_gender = data["teacher_sex"]
-            student_birth = data["date_of_birth"]
-            student_name_furigana = data["student_fullname_furigana"]
-            student_post_num = data["student_post_num"]
-            student_class_id = data["student_class_name"]
-            student_department_name = data["student_department_name"]
-            student_field_name = data["student_field_name"]
-            try:
-                email = data["email"]
-            except:
-                return JsonResponse({"error": "・このメールアドレスは既存しました。"})
+        user = self.request.user
+        data = self.request.data
+        student_name = data["student_name"]
+        student_phone = data["student_phone"]
+        student_address = data["student_address"]
+        student_gender = data["student_gender"]
+        student_birth = data["student_birth"]
+        student_name_furigana = data["student_name_furigana"]
+        student_post_num = data["student_post_num"]
+        student_school_id = data["student_school_id"]
+        student_class_id = data["student_class_id"]
+        teacher_belong_to_id = data["teacher_belong_to_id"]
+        student_school = data["student_school"]
+        email = data["student_email"]
+        f_username = SchoolGroup.objects.get(
+            user_id=user.id, group_id=teacher_belong_to_id
+        ).sign
 
-            user_profile = UserProfile.objects.get(user_id=user.id)
-            group_school = SchoolGroup.objects.get(
-                group_id=user_profile.teacher_belong_to_id
-            )
-            f_username = group_school.sign
-            date = datetime.date.today()
-            date = str(date).replace("-", "")[2:]
+        l_username = UserAccount.objects.filter(be_remove=str(user.id)).count()
+        username = f_username + str(l_username)
+        password = student_birth.replace("-", "")
+        create_user = UserAccount.objects.create_user(email, username, password)
+        create_user.be_remove = user.id
+        create_user.save()
+        user = UserAccount.objects.get(username=username)
+        UserProfile.objects.update_or_create(
+            user_id=user.id,
+            defaults={
+                "email": email,
+                "fullname": student_name,
+                "phone": student_phone,
+                "address": student_address,
+                "date_of_birth": student_birth,
+                "teacher_sex": student_gender,
+                "teacher_belong_to_id": teacher_belong_to_id,
+                "student_id": student_school_id,
+                "school_id": student_school,
+                "student_class": student_class_id,
+                "student_fullname_furigana": student_name_furigana,
+                "student_post_num": student_post_num,
+                "user_type": "3",
+            },
+        )
+        return JsonResponse({"success": "created Student Account"})
 
-            l_username = UserAccount.objects.latest("id")
-            username = f_username + date + str(l_username.id + 1)
-            password = student_birth.replace("-", "")
 
-            create_user = UserAccount.objects.create_user(email, username, password)
-            create_user.be_remove = user.be_remove
-            create_user.save()
-            user = UserAccount.objects.get(username=username)
-            UserProfile.objects.update_or_create(
-                user_id=user.id,
-                defaults={
-                    "fullname": student_name,
-                    "phone": student_phone,
-                    "address": student_address,
-                    "date_of_birth": student_birth,
-                    "teacher_sex": student_gender,
-                    "teacher_belong_to_id": group_school.group_id,
-                    "teacher_belong_to_name": group_school.group_name,
-                    "student_department_name": student_department_name,
-                    "student_class_name": student_class_id,
-                    "student_fullname_furigana": student_name_furigana,
-                    "student_field_name": student_field_name,
-                    "student_post_num": student_post_num,
-                    "user_type": "3",
-                },
-            )
-            return JsonResponse({"success": "created Student Account"})
-        except:
-            return JsonResponse({"error": "something wrong right here"})
+# 学生アカウントの削除
+def check_user_type(user):
+    user_profile = UserProfile.objects.get(user_id=user.id)
+    return user_profile.user_type
 
 
 class DeleteStudentAccountView(APIView):
