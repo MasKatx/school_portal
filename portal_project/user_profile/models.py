@@ -53,7 +53,7 @@ class UserProfile(models.Model):
     # 学生情報
     student_field_name = models.CharField(max_length=255, blank=True)
     student_department_name = models.CharField(max_length=255, blank=True)
-    student_class_name = models.CharField(max_length=5, blank=True)
+    student_class_name = models.CharField(max_length=255, blank=True)
     student_fullname_furigana = models.CharField(max_length=255, blank=True)
     student_post_num = models.CharField(max_length=10, blank=True)
 
