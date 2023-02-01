@@ -15,7 +15,7 @@ from .models import SchoolGroup, ClassGroup, PostModels
 from .serializers import (
     SchoolGroupSerializer,
     ClassSchoolSerialier,
-    PostModelsSerialier,
+    PostModelsSerializer,
 )
 
 
@@ -158,27 +158,35 @@ class CreateorUpdatePostView(APIView):
 
     # 掲示板を作成
     def post(self, request, format=None):
-        data = self.request.data
-        user = self.request.user
-        post_title = data["post_title"]
-        content = data["content"]
-        created_by_id = data["created_by_id"]
-        group_id = data["group_id"]
-        group_id = SchoolGroup.objects.get(group_id=group_id)
-        PostModels.objects.create(
-            user=group_id,
-            title=post_title,
-            content=content,
-            created_by_id=created_by_id,
-        )
+        try:
+            data = self.request.data
+            user = self.request.user
+            post_title = data["post_title"]
+            content = data["content"]
+            created_by_id = data["created_by_id"]
+            group_id = data["group_id"]
+            group_id = SchoolGroup.objects.get(group_id=group_id)
+            PostModels.objects.create(
+                user=group_id,
+                title=post_title,
+                content=content,
+                created_by_id=created_by_id,
+            )
 
-        school_post = SchoolGroup.objects.get(group_id=group_id)
-        school_post = SchoolGroupSerializer(school_post)
+            school_post = SchoolGroup.objects.get(group_id=group_id)
+            school_post = SchoolGroupSerializer(school_post)
 
-        # return JsonResponse(school_post.data, safe=True)
-        return JsonResponse({"success": "Created New Post!"})
+            # return JsonResponse(school_post.data, safe=True)
+            return JsonResponse({"success": "Created New Post!"})
+        except:
+            return JsonResponse({"error": "Not Create New Post..."})
 
     # 掲示板の更新
+    # put --> 更新する
+    # 参考になるかもしれないコード
+    # portal/views.py(今いるファイル) 204~216行目
+    def put(self, request, str, format=None):
+        pass
 
 
 class GetClassSchool(APIView):
@@ -274,6 +282,11 @@ class UpdateClassSchool(APIView):
     # except:
     #     return JsonResponse({"error": "somthing wrong right here"})
 
+    # データの取得
+    def get(self, request, format=None):
+        post_models = PostModels.objects.all()
+        post_models = PostModelsSerializer(post_models, many=True)
+        return JsonResponse(post_models.data, safe=False)
 
 class DeleteClassSchool(APIView):
     def delete(self, request, pk, format=None):
@@ -288,3 +301,25 @@ class DeleteClassSchool(APIView):
 
 
 # 掲示板の削除
+class DeletePostView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, pk, format=None):
+        user = self.request.user
+        if check_user_type_type(user) == "2":
+            try:
+                post_models = PostModels.objects.get(pk=pk)
+                post_models.delete()
+                return JsonResponse({"success": "Post models be deleted"})
+            except:
+                return JsonResponse({"error": "u can not deleted this post"})
+
+# 掲示板の閲覧
+class ShowPostView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, str, format=None):
+        user = self.request.user
+        create_content = PostModels.objects.filter(created_by_id=str)
+        create_content_id = PostModelsSerialier(create_content, many=True)
+        return JsonResponse(create_content_id.data, safe=False)

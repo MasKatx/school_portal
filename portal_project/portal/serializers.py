@@ -14,7 +14,7 @@ class ClassSchoolSerialier(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class PostModelsSerialier(serializers.ModelSerializer):
+class PostModelsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostModels
         fields = "__all__"
