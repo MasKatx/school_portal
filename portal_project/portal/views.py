@@ -181,33 +181,6 @@ class CreateorUpdatePostView(APIView):
         except:
             return JsonResponse({"error": "Not Create New Post..."})
 
-
-    # 掲示板の更新
-    class CreateorUpdatePostView(APIView):
-        permission_classes = [IsAuthenticated]
-
-        def put(self, request, pk, format=None):
-
-            user = self.request.user
-            data = self.request.data
-            post_title = data["post_title"]
-            content = data["content"]
-            group_id = data["group_id"]
-            if check_user_type_type(user) == "2":
-                PostModels.objects.update(
-                    id=pk,
-                    defaults={
-                        "post_title" : post_title,
-                        "content" : content,
-                        "group_id" : group_id,
-                    }
-            )
-                return JsonResponse({"success": "Update Post"})
-            else:
-                return JsonResponse({"error": "Update failed Post"})
-
-
-
 class GetClassSchool(APIView):
     def get(self, request, format=None):
         try:
@@ -246,7 +219,7 @@ class CreateClassSchool(APIView):
                 )
                 return JsonResponse({"success": "created"})
             else:
-                return JsonResponse({"error": "・クラス名が既存しました。"})
+                return JsonResponse({"error": "・このクラス名は既に存在しています。"})
 
     # except:
     #     return JsonResponse({"error": "somthing wrong right here"})
@@ -293,10 +266,10 @@ class UpdateClassSchool(APIView):
                     )
                     return JsonResponse({"sucess": "・更新しました。1"})
                 else:
-                    return JsonResponse({"error": "・クラス名は既存しました。"})
+                    return JsonResponse({"error": "・このクラス名は既に存在しています。"})
 
         else:
-            return JsonResponse({"error": "・クラス名は既存しました。"})
+            return JsonResponse({"error": "・このクラス名は既に存在しています。"})
 
     # except:
     #     return JsonResponse({"error": "somthing wrong right here"})
