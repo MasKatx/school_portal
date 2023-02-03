@@ -1,5 +1,4 @@
-# ![Edify](https://readme-typing-svg.herokuapp.com?font=Inter&color=3A9CDF&size=30&weight=700&lines=Call+me+Jubayer+Riyad;JubayerRiyad)
- ～学校ポータルシステム～
+# Edify ～学校ポータルシステム～
 
 ![Edify](./portal_project/media/logos/linkedin_banner_image_1.png "Edify")
 
