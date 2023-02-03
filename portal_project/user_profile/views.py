@@ -344,13 +344,13 @@ class DeleteStudentAccountView(APIView):
 
 
 # 学生アカウント一覧
-class ShowStudentAccountsView(APIView):
-    permission_classes = [IsAuthenticated]
+# class ShowStudentAccountsView(APIView):
+#     permission_classes = [IsAuthenticated]
 
-    def get(self, request, str, format=None):
-        user = self.request.user
-        str = f"{str}".upper()
-        studentaccounts = UserProfile.objects.filter(teacher_belong_to_id=str)
-        studentaccounts_id = UserProfileSerializer(studentaccounts, many=True)
-        print(str)
-        return JsonResponse(studentaccounts_id.data, safe=False)
+#     def get(self, request, format=None):
+#         user = self.request.user
+#         str = f"{str}".upper()
+#         studentaccounts = UserProfile.objects.filter(teacher_belong_to_id=str)
+#         studentaccounts_id = UserProfileSerializer(studentaccounts, many=True)
+#         print(str)
+#         return JsonResponse(studentaccounts_id.data, safe=False)
