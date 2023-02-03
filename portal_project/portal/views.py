@@ -181,12 +181,31 @@ class CreateorUpdatePostView(APIView):
         except:
             return JsonResponse({"error": "Not Create New Post..."})
 
+
     # 掲示板の更新
-    # put --> 更新する
-    # 参考になるかもしれないコード
-    # portal/views.py(今いるファイル) 204~216行目
-    def put(self, request, str, format=None):
-        pass
+    class CreateorUpdatePostView(APIView):
+        permission_classes = [IsAuthenticated]
+
+        def put(self, request, pk, format=None):
+
+            user = self.request.user
+            data = self.request.data
+            post_title = data["post_title"]
+            content = data["content"]
+            group_id = data["group_id"]
+            if check_user_type_type(user) == "2":
+                PostModels.objects.update(
+                    id=pk,
+                    defaults={
+                        "post_title" : post_title,
+                        "content" : content,
+                        "group_id" : group_id,
+                    }
+            )
+                return JsonResponse({"success": "Update Post"})
+            else:
+                return JsonResponse({"error": "Update failed Post"})
+
 
 
 class GetClassSchool(APIView):
