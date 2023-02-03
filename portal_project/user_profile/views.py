@@ -42,6 +42,20 @@ class GetUserProfileView(APIView):
             return JsonResponse({"value": "error"})
 
 
+class GetAdminProfile(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        try:
+            user = self.request.user
+            admin = UserAccount.objects.get(id=int(user.be_remove))
+            admin = UserProfile.objects.get(user_id=admin.id)
+            admin = UserProfileSerializer(admin)
+            return JsonResponse(admin.data)
+        except:
+            return JsonResponse({"value": "error"})
+
+
 class UpdateUserProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -51,10 +65,11 @@ class UpdateUserProfileView(APIView):
             user = UserAccount.objects.get(id=user.id)
             user_id = user.id
             data = self.request.data
-            manager = data["manager"]
-            group_phone = data["group_phone"]
-            group_address = data["group_address"]
-            group_name = data["group_name"]
+            manager = data["fullname"]
+            group_phone = data["phone"]
+            group_address = data["address"]
+            group_name = data["all_group_name"]
+            print(data)
             if request.method == "PUT":
                 UserProfile.objects.update_or_create(
                     id=user_id,
@@ -62,7 +77,7 @@ class UpdateUserProfileView(APIView):
                         "fullname": manager,
                         "phone": group_phone,
                         "address": group_address,
-                        "group_name": group_name,
+                        "all_group_name": group_name,
                     },
                 )
                 user_profile = UserProfile.objects.get(user_id=user_id)
@@ -93,8 +108,10 @@ class UpdateUserAvatarView(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def put(self, request, pk, format=None):
+        print(pk)
         try:
             avatar = request.data["avatar"]
+            print(avatar)
             UserAvatar.objects.update_or_create(
                 user_id=pk,
                 defaults={"avatar": avatar},
@@ -176,55 +193,38 @@ class CreateTeachersAccountView(APIView):
         )
         return JsonResponse({"success": "created"})
 
-    # except:
-    #     return JsonResponse({"error": "somthing wrong"})
-
 
 class UpdateTeachersAccountView(APIView):
-    permission_classes = [IsAuthenticated]
-
     def put(self, request, pk, format=None):
-        try:
-
-            user = self.request.user
-            data = self.request.data
-            teacher_name = data["teacher_name"]
-            teacher_phone = data["teacher_phone"]
-            teacher_address = data["teacher_address"]
-            teacher_library = data["teacher_library"]
-            teacher_course = data["teacher_course"]
-            teacher_sex = data["teacher_sex"]
-            teacher_birth = data["teacher_birth"]
-            email = data["teacher_email"]
-            teacher_belong_to_id = data["teacher_belong_to_id"]
-            group_name = SchoolGroup.objects.get(
-                group_id=teacher_belong_to_id
-            ).group_name
-            user = UserAccount.objects.update_or_create(
-                id=pk, defaults={"email": email}
-            )
-            user_profile = UserProfile.objects.update_or_create(
-                user_id=pk,
-                defaults={
-                    "fullname": teacher_name,
-                    "phone": teacher_phone,
-                    "address": teacher_address,
-                    "date_of_birth": teacher_birth,
-                    "teacher_belong_to_name": group_name,
-                    "teacher_belong_to_id": teacher_belong_to_id,
-                    "teacher_library": teacher_library,
-                    "teacher_course": teacher_course,
-                    "teacher_sex": teacher_sex,
-                    "user_type": "2",
-                },
-            )
-            user_profile = UserProfile.objects.get(id=user.id)
-            user_profile = UserProfileSerializer(user_profile)
-            print(user_profile)
-
-            return JsonResponse({"success": "created"})
-        except:
-            return JsonResponse({"error": "somthing wrong"})
+        user = self.request.user
+        data = self.request.data
+        teacher_name = data["fullname"]
+        teacher_phone = data["phone"]
+        teacher_address = data["address"]
+        teacher_library = data["teacher_library"]
+        teacher_course = data["teacher_course"]
+        teacher_sex = data["teacher_sex"]
+        teacher_birth = data["date_of_birth"]
+        email = data["email"]
+        teacher_belong_to_id = data["teacher_belong_to_id"]
+        group_name = SchoolGroup.objects.get(group_id=teacher_belong_to_id).group_name
+        user = UserAccount.objects.update_or_create(id=pk, defaults={"email": email})
+        user_profile = UserProfile.objects.update_or_create(
+            user_id=pk,
+            defaults={
+                "fullname": teacher_name,
+                "phone": teacher_phone,
+                "address": teacher_address,
+                "date_of_birth": teacher_birth,
+                "teacher_belong_to_name": group_name,
+                "teacher_belong_to_id": teacher_belong_to_id,
+                "teacher_library": teacher_library,
+                "teacher_course": teacher_course,
+                "teacher_sex": teacher_sex,
+                "user_type": "2",
+            },
+        )
+        return JsonResponse({"success": "created"})
 
 
 class DeleteTeachersAccountView(APIView):
@@ -254,40 +254,6 @@ class GetAllTeacherAvatarByAdmin(APIView):
             teacher_avt_lst.append(teacher_avt)
         teacher_avt_lst = UserAvatarSerializer(teacher_avt_lst, many=True)
         return JsonResponse(teacher_avt_lst.data, safe=False)
-
-
-class UpdateTeachersAccountView(APIView):
-    def put(self, request, pk, format=None):
-        data = self.request.data
-        user = self.request.user
-        teacher_name = data["teacher_name"]
-        teacher_phone = data["teacher_phone"]
-        teacher_address = data["teacher_address"]
-        teacher_library = data["teacher_library"]
-        teacher_course = data["teacher_course"]
-        teacher_sex = data["teacher_sex"]
-        teacher_birth = data["teacher_birth"]
-        email = data["teacher_email"]
-        teacher_belong_to_id = data["teacher_belong_to_id"]
-        group_name = SchoolGroup.objects.get(group_id=teacher_belong_to_id).group_name
-        user = UserAccount.objects.update_or_create(id=pk, defaults={"email": email})
-        user_profile = UserProfile.objects.update_or_create(
-            user_id=pk,
-            defaults={
-                "fullname": teacher_name,
-                "phone": teacher_phone,
-                "address": teacher_address,
-                "date_of_birth": teacher_birth,
-                "teacher_belong_to_name": group_name,
-                "teacher_belong_to_id": teacher_belong_to_id,
-                "teacher_library": teacher_library,
-                "teacher_course": teacher_course,
-                "teacher_sex": teacher_sex,
-                "user_type": "2",
-            },
-        )
-        print(UserProfile.objects.get(user_id=pk))
-        return JsonResponse({"success": "created"})
 
 
 # 学生アカウントの作成
@@ -349,6 +315,32 @@ class CreateStudentsAccountView(APIView):
 
         except:
             return JsonResponse({"error": "don`t create Account"})
+
+
+# 学生アカウントの削除
+def check_user_type(user):
+    user_profile = UserProfile.objects.get(user_id=user.id)
+    return user_profile.user_type
+
+
+class DeleteStudentAccountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    # get, put, post, delete
+    def delete(self, request, pk, format=None):
+        user = self.request.user
+        # 先生 => be_remove, username, email....
+        if check_user_type(user) == "2":
+            user_will_be_deleted = UserAccount.objects.get(
+                pk=pk, be_remove=user.be_remove
+            )
+            user_will_be_deleted.delete()
+            return JsonResponse({"success": f"{user}を消しました。"})
+        else:
+            return JsonResponse({"error": f"{user}を消すことはできません。"})
+
+    # except:
+    #     return JsonResponse({"error": "don`t create Account"})
 
 
 # 学生アカウント一覧

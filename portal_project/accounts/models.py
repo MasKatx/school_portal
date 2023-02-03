@@ -40,6 +40,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin, models.Model):
         max_length=255,
         unique=True,
     )
+
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -50,7 +51,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin, models.Model):
     objects = UserAccountManager()
 
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email"]
+    REQUIRED_FIELDS = ["email", "created_at"]
 
     def __str__(self):
         return self.username

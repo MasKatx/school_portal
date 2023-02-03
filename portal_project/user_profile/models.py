@@ -4,13 +4,10 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# others
-import string
-import random
 
-
-def upload_path(instance, filname):
-    return "/".join(["covers", str(instance.user.username), filname])
+def upload_path(instance, filename):
+    print(instance.user.username)
+    return "/".join(["covers", str(instance.user.username), filename])
 
 
 class UserAvatar(models.Model):
@@ -25,8 +22,8 @@ class UserAvatar(models.Model):
         db_table = "user_avatar"
 
 
-# admin profile
 class UserProfile(models.Model):
+    # admin profile
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     fullname = models.CharField(max_length=255, blank=True)
     phone = models.CharField(max_length=20, blank=True)
@@ -34,6 +31,7 @@ class UserProfile(models.Model):
     date_of_birth = models.DateField(
         help_text="The date of birth", blank=True, null=True
     )
+    all_group_name = models.CharField(max_length=255, blank=True)
     teacher_library = models.BooleanField(default=False, blank=True)
     user_types = [
         ("1", "admin"),
@@ -51,10 +49,10 @@ class UserProfile(models.Model):
     teacher_belong_to_id = models.CharField(max_length=255, blank=True)
     teacher_belong_to_name = models.CharField(max_length=255, blank=True)
     teacher_course = models.CharField(max_length=255, blank=True)
-    
+
     # 学生情報
-    student_id = models.CharField(max_length=30, blank=True)
-    school_id = models.CharField(max_length=255, blank=True)
+    student_field_name = models.CharField(max_length=255, blank=True)
+    student_department_name = models.CharField(max_length=255, blank=True)
     student_class_name = models.CharField(max_length=5, blank=True)
     student_fullname_furigana = models.CharField(max_length=255, blank=True)
     student_post_num = models.CharField(max_length=10, blank=True)
