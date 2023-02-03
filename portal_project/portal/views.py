@@ -9,13 +9,14 @@ from user_profile.models import UserProfile
 from django.http import JsonResponse
 
 # import models
-from .models import SchoolGroup, ClassGroup, PostModels
+from .models import SchoolGroup, ClassGroup, PostModels, ChatSpace
 
 # import models serializer
 from .serializers import (
     SchoolGroupSerializer,
     ClassSchoolSerialier,
     PostModelsSerializer,
+    ChatSpaceSerializer,
 )
 
 
@@ -323,3 +324,12 @@ class ShowPostView(APIView):
         create_content = PostModels.objects.filter(created_by_id=str)
         create_content_id = PostModelsSerialier(create_content, many=True)
         return JsonResponse(create_content_id.data, safe=False)
+
+class ShowChatView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, str, format=None):
+        user = self.request.user
+        chat_content = ChatSpace.objects.filter(send_user=str)
+        chat_content_id = ChatSpaceSerializer(chat_content, many=True)
+        return JsonResponse(chat_content_id.data, safe=False)
