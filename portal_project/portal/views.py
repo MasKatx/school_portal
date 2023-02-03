@@ -293,22 +293,16 @@ class DeleteClassSchool(APIView):
 
 
 # 掲示板の削除
-class DestroyPostView(APIView):
-    serializer_class = PostModelsSerializer
+class DeletePostView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, format=None):
-        post_models = PostModels.objects.all()
-        post_models = PostModelsSerializer(post_models, many=True)
-        return JsonResponse(post_models.data, safe=False)
-
-    def delete(self, request, group_id, format=None):
+    def delete(self, request, pk, format=None):
         user = self.request.user
         if check_user_type_type(user) == "2":
             try:
-                post_models = SchoolGroup.objects.get(group_id=group_id)
+                post_models = PostModels.objects.get(pk=pk)
                 post_models.delete()
-                return JsonResponse({"success": "post be deleted"})
+                return JsonResponse({"success": "Post models be deleted"})
             except:
                 return JsonResponse({"error": "u can not deleted this post"})
 
