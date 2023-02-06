@@ -288,7 +288,7 @@ class CreateStudentsAccountView(APIView):
             try:
                 email = data["email"]
             except:
-                return JsonResponse({"error": "・このメールアドレスは既存しました。"})
+                return JsonResponse({"error": "・このメールアドレスは既に登録されています。"})
 
             user_profile = UserProfile.objects.get(user_id=user.id)
             group_school = SchoolGroup.objects.get(
@@ -341,9 +341,9 @@ class DeleteStudentAccountView(APIView):
                 pk=pk, be_remove=user.be_remove
             )
             user_will_be_deleted.delete()
-            return JsonResponse({"success": f"{user}を消しました。"})
+            return JsonResponse({"success": f"{user}の学生情報を削除しました。"})
         else:
-            return JsonResponse({"error": f"{user}を消すことはできません。"})
+            return JsonResponse({"error": f"{user}の学生情報を削除することはできません。"})
 
 
 # 学生アカウント一覧
@@ -389,7 +389,7 @@ class UpdateStudentsAccountView(APIView):
             try:
                 email = data["email"]
             except:
-                return JsonResponse({"error": "・このメールアドレスは既存しました。"})
+                return JsonResponse({"error": "・このメールアドレスは既に登録されています。"})
             user = UserAccount.objects.update_or_create(
                 id=pk, defaults={"email": email}
             )
