@@ -251,7 +251,7 @@ class UpdateClassSchool(APIView):
                         "class_studentnumber": int(class_studentnumber),
                     },
                 )
-                return JsonResponse({"sucess": "・更新しました。1"})
+                return JsonResponse({"sucess": "・更新しました。"})
             else:
                 if ClassGroup.objects.filter(class_name=class_name).count() == 0:
                     ClassGroup.objects.update_or_create(
@@ -264,7 +264,7 @@ class UpdateClassSchool(APIView):
                             "class_studentnumber": int(class_studentnumber),
                         },
                     )
-                    return JsonResponse({"sucess": "・更新しました。1"})
+                    return JsonResponse({"sucess": "・更新しました。"})
                 else:
                     return JsonResponse({"error": "・このクラス名は既に存在しています。"})
 
