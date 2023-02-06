@@ -43,7 +43,7 @@ class UpdateUserAccountPassword(APIView):
         self.object = self.get_queryset()
         if not self.object.check_password(data["old_password"]):
             print(self.object.check_password(data["old_password"]))
-            return JsonResponse({"error": "・パスワードが間違います。"})
+            return JsonResponse({"error": "・パスワードが異なります。"})
         self.object.set_password(data["new_password"])
         self.object.save()
         return JsonResponse({"success": "password be updated"})
