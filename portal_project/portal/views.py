@@ -181,14 +181,6 @@ class CreateorUpdatePostView(APIView):
         except:
             return JsonResponse({"error": "Not Create New Post..."})
 
-    # 掲示板の更新
-    # put --> 更新する
-    # 参考になるかもしれないコード
-    # portal/views.py(今いるファイル) 204~216行目
-    def put(self, request, str, format=None):
-        pass
-
-
 class GetClassSchool(APIView):
     def get(self, request, format=None):
         try:
@@ -227,7 +219,7 @@ class CreateClassSchool(APIView):
                 )
                 return JsonResponse({"success": "created"})
             else:
-                return JsonResponse({"error": "・クラス名が既存しました。"})
+                return JsonResponse({"error": "・このクラス名は既に存在しています。"})
 
     # except:
     #     return JsonResponse({"error": "somthing wrong right here"})
@@ -259,7 +251,7 @@ class UpdateClassSchool(APIView):
                         "class_studentnumber": int(class_studentnumber),
                     },
                 )
-                return JsonResponse({"sucess": "・更新しました。1"})
+                return JsonResponse({"sucess": "・更新しました。"})
             else:
                 if ClassGroup.objects.filter(class_name=class_name).count() == 0:
                     ClassGroup.objects.update_or_create(
@@ -272,12 +264,12 @@ class UpdateClassSchool(APIView):
                             "class_studentnumber": int(class_studentnumber),
                         },
                     )
-                    return JsonResponse({"sucess": "・更新しました。1"})
+                    return JsonResponse({"sucess": "・更新しました。"})
                 else:
-                    return JsonResponse({"error": "・クラス名は既存しました。"})
+                    return JsonResponse({"error": "・このクラス名は既に存在しています。"})
 
         else:
-            return JsonResponse({"error": "・クラス名は既存しました。"})
+            return JsonResponse({"error": "・このクラス名は既に存在しています。"})
 
     # except:
     #     return JsonResponse({"error": "somthing wrong right here"})
