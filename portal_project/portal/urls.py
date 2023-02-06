@@ -34,5 +34,5 @@ urlpatterns = [
     path("create_class", CreateClassSchool.as_view()),
     path("update_class/<int:pk>", UpdateClassSchool.as_view()),
     path("delete_class/<int:pk>", DeleteClassSchool.as_view()),
-    path("show_chat/<int:pk>", ShowChatView.as_view()),
+    path("show_chat/<path:str>", ShowChatView.as_view()),
 ]

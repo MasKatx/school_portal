@@ -325,6 +325,7 @@ class ShowPostView(APIView):
         create_content_id = PostModelsSerialier(create_content, many=True)
         return JsonResponse(create_content_id.data, safe=False)
 
+# チャットの閲覧
 class ShowChatView(APIView):
     permission_classes = [IsAuthenticated]
 
