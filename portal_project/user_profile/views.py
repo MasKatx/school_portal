@@ -272,28 +272,24 @@ class CreateStudentsAccountView(APIView):
 
     def post(self, request, format=None):
         try:
-
             user = self.request.user
             data = self.request.data
             student_name = data["fullname"]
             student_phone = data["phone"]
             student_address = data["address"]
-            student_gender = data["teacher_sex"]
             student_birth = data["date_of_birth"]
-            student_name_furigana = data["student_fullname_furigana"]
+            student_fullname_furigana = data["student_fullname_furigana"]
             student_post_num = data["student_post_num"]
+            teacher_sex = data["teacher_sex"]
+            email = data["email"]
             student_class_id = data["student_class_name"]
             student_department_name = data["student_department_name"]
             student_field_name = data["student_field_name"]
-            try:
-                email = data["email"]
-            except:
-                return JsonResponse({"error": "・このメールアドレスは既に登録されています。"})
-
             user_profile = UserProfile.objects.get(user_id=user.id)
             group_school = SchoolGroup.objects.get(
                 group_id=user_profile.teacher_belong_to_id
             )
+
             f_username = group_school.sign
             date = datetime.date.today()
             date = str(date).replace("-", "")[2:]
@@ -301,7 +297,6 @@ class CreateStudentsAccountView(APIView):
             l_username = UserAccount.objects.latest("id")
             username = f_username + date + str(l_username.id + 1)
             password = student_birth.replace("-", "")
-
             create_user = UserAccount.objects.create_user(email, username, password)
             create_user.be_remove = user.be_remove
             create_user.save()
@@ -313,20 +308,26 @@ class CreateStudentsAccountView(APIView):
                     "phone": student_phone,
                     "address": student_address,
                     "date_of_birth": student_birth,
-                    "teacher_sex": student_gender,
-                    "teacher_belong_to_id": group_school.group_id,
-                    "teacher_belong_to_name": group_school.group_name,
-                    "student_department_name": student_department_name,
-                    "student_class_name": student_class_id,
-                    "student_fullname_furigana": student_name_furigana,
-                    "student_field_name": student_field_name,
+                    "teacher_belong_to_id": user_profile.teacher_belong_to_id,
+                    "teacher_belong_to_name": user_profile.teacher_belong_to_name,
+                    "teacher_sex": teacher_sex,
+                    "student_class": student_class_id,
+                    "student_fullname_furigana": student_fullname_furigana,
                     "student_post_num": student_post_num,
+                    "student_field_name": student_field_name,
+                    "student_department_name": student_department_name,
                     "user_type": "3",
                 },
             )
             return JsonResponse({"success": "created Student Account"})
         except:
-            return JsonResponse({"error": "something wrong right here"})
+            return JsonResponse({"error": "soemthing wrong Student Account"})
+
+
+# 学生アカウントの削除
+def check_user_type(user):
+    user_profile = UserProfile.objects.get(user_id=user.id)
+    return user_profile.user_type
 
 
 class DeleteStudentAccountView(APIView):
@@ -335,10 +336,11 @@ class DeleteStudentAccountView(APIView):
     # get, put, post, delete
     def delete(self, request, pk, format=None):
         user = self.request.user
+        print(pk)
         # 先生 => be_remove, username, email....
         if check_user_type(user) == "2":
             user_will_be_deleted = UserAccount.objects.get(
-                pk=pk, be_remove=user.be_remove
+                id=pk, be_remove=user.be_remove
             )
             user_will_be_deleted.delete()
             return JsonResponse({"success": f"{user}の学生情報を削除しました。"})

@@ -3,6 +3,8 @@ from django.conf import settings
 import random
 import string
 
+from user_profile.models import UserProfile, UserAvatar
+
 
 def generate_unique_group_id():
     lenght = 12
@@ -13,16 +15,6 @@ def generate_unique_group_id():
     return group_id
 
 
-# def generate_exchange_id():
-#     lenght = 4
-#     while True:
-#         exchange_id = "".join(random.choices(string.ascii_uppercase, k=lenght))
-#         if ChatModels.objects.filter(exchange_id=exchange_id).count() == 0:
-#             break
-#     return exchange_id
-
-
-# Create your models here.
 class SchoolGroup(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     group_name = models.CharField(max_length=255)
@@ -54,11 +46,15 @@ class ClassGroup(models.Model):
 
 # 掲示板
 class PostModels(models.Model):
-    user = models.ForeignKey(SchoolGroup, on_delete=models.CASCADE)
+    school_group = models.ForeignKey(
+        SchoolGroup, on_delete=models.CASCADE, related_name="school_group"
+    )
     title = models.CharField(max_length=255)
     content = models.TextField(default="")
     created = models.DateTimeField(auto_now_add=True)
-    created_by_id = models.CharField(max_length=255)
+    poster = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="poster"
+    )
 
     def __str__(self):
         return self.title
@@ -74,14 +70,3 @@ class ChatSpace(models.Model):
 
     def __str__(self):
         return self.chat_box
-
-
-# class ChatRoom(models.Model):
-#     user_name = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-
-# class ChatValue(models.Model):
-#     value = models.CharField(max_length=255)
-#     created_value = models.DateTimeField(auto_now_add=True)
-#     room_id = models.CharField(max_length=255)
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
