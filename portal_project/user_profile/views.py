@@ -285,7 +285,6 @@ class CreateStudentsAccountView(APIView):
             student_class_id = data["student_class_name"]
             student_department_name = data["student_department_name"]
             student_field_name = data["student_field_name"]
-            email = data["email"]
             user_profile = UserProfile.objects.get(user_id=user.id)
             group_school = SchoolGroup.objects.get(
                 group_id=user_profile.teacher_belong_to_id
