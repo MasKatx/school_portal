@@ -11,6 +11,9 @@ from .views import (
     CreateClassSchool,
     UpdateClassSchool,
     DeleteClassSchool,
+    GetPosterInfomationView,
+    CreatePostView,
+    UpdatePostView,
 )
 
 
@@ -25,10 +28,11 @@ urlpatterns = [
         DestroySchoolGroupView.as_view(),
     ),
     # path("test/<path:str>", TestView.as_view()),
-    path("create/post", CreateorUpdatePostView.as_view()),
-    path("delete/<int:pk>", DestroyPostView.as_view()),
-    path("update/<path:str>", CreateorUpdatePostView.as_view()),
-    path("show/<path:str>", ShowPostView.as_view()),
+    path("create_post", CreatePostView.as_view()),
+    path("get_userinfor_post/<int:post_num>", GetPosterInfomationView.as_view()),
+    path("delete_post/<int:pk>", DestroyPostView.as_view()),
+    path("update_post/<int:pk>", UpdatePostView.as_view()),
+    path("get_post/<int:post_num>", ShowPostView.as_view()),
     path("get_class", GetClassSchool.as_view()),
     path("create_class", CreateClassSchool.as_view()),
     path("update_class/<int:pk>", UpdateClassSchool.as_view()),

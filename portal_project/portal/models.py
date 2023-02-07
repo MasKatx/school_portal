@@ -3,6 +3,8 @@ from django.conf import settings
 import random
 import string
 
+from user_profile.models import UserProfile, UserAvatar
+
 
 def generate_unique_group_id():
     lenght = 12
@@ -48,11 +50,15 @@ class ClassGroup(models.Model):
 # その次にviewsにAPI接続できるように頑張る
 # 掲示板
 class PostModels(models.Model):
-    user = models.ForeignKey(SchoolGroup, on_delete=models.CASCADE)
+    school_group = models.ForeignKey(
+        SchoolGroup, on_delete=models.CASCADE, related_name="school_group"
+    )
     title = models.CharField(max_length=255)
     content = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
-    created_by_id = models.CharField(max_length=255)
+    poster = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="poster"
+    )
 
     def __str__(self):
         return self.title

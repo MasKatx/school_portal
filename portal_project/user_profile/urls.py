@@ -33,9 +33,7 @@ urlpatterns = [
     path("delete_teacher_account/<int:pk>", DeleteTeachersAccountView.as_view()),
     path("create_student_account", CreateStudentsAccountView.as_view()),
     path("update_student_account/<int:pk>", UpdateStudentsAccountView.as_view()),
-    path(
-        "delete_student_account/<int:pk>/<int:pk>", DeleteStudentAccountView.as_view()
-    ),
+    path("delete_student_account/<int:pk>", DeleteStudentAccountView.as_view()),
     path("get_student_accounts_profile", GetStudentAccountsProfileView.as_view()),
     path("get_student_avatar_profile", GetStudentAvatarProfile.as_view()),
     path("get_admin_profile", GetAdminProfile.as_view()),

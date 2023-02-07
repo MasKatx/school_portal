@@ -12,7 +12,12 @@ def upload_path(instance, filename):
 
 class UserAvatar(models.Model):
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="user_avatar",
+        to_field="id",
+    )
     avatar = models.ImageField(upload_to=upload_path, blank=True)
 
     def __str__(self):
@@ -24,7 +29,12 @@ class UserAvatar(models.Model):
 
 class UserProfile(models.Model):
     # admin profile
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="user_profile",
+        to_field="id",
+    )
     fullname = models.CharField(max_length=255, blank=True)
     phone = models.CharField(max_length=20, blank=True)
     address = models.CharField(max_length=255, blank=True)
