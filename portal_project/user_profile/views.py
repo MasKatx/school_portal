@@ -27,12 +27,12 @@ from .serializers import (
 from accounts.serializers import UserCreateSerializer
 
 
-# 学生アカウントの削除
 def check_user_type(user):
     user_profile = UserProfile.objects.get(user_id=user.id)
     return user_profile.user_type
 
 
+# 学生アカウントの削除
 class GetUserProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
