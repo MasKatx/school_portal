@@ -291,6 +291,14 @@ class CreateStudentsAccountView(APIView):
                 user_id=user.id, group_id=teacher_belong_to_id
             ).sign
 
+            student_class_id = data["student_class_name"]
+            student_department_name = data["student_department_name"]
+            student_field_name = data["student_field_name"]
+            try:
+                email = data["email"]
+            except:
+                return JsonResponse({"error": "・このメールアドレスは既に登録されています。"})
+
             l_username = UserAccount.objects.filter(be_remove=str(user.id)).count()
             username = f_username + str(l_username)
             password = student_birth.replace("-", "")
@@ -339,9 +347,9 @@ class DeleteStudentAccountView(APIView):
                 pk=pk, be_remove=user.be_remove
             )
             user_will_be_deleted.delete()
-            return JsonResponse({"success": f"{user}を消しました。"})
+            return JsonResponse({"success": f"{user}の学生情報を削除しました。"})
         else:
-            return JsonResponse({"error": f"{user}を消すことはできません。"})
+            return JsonResponse({"error": f"{user}の学生情報を削除することはできません。"})
 
 
 # 学生アカウント一覧
@@ -387,7 +395,7 @@ class UpdateStudentsAccountView(APIView):
             try:
                 email = data["email"]
             except:
-                return JsonResponse({"error": "・このメールアドレスは既存しました。"})
+                return JsonResponse({"error": "・このメールアドレスは既に登録されています。"})
             user = UserAccount.objects.update_or_create(
                 id=pk, defaults={"email": email}
             )

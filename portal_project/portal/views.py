@@ -180,13 +180,6 @@ class CreateorUpdatePostView(APIView):
         except:
             return JsonResponse({"error": "Not Create New Post..."})
 
-    # 掲示板の更新
-    # put --> 更新する
-    # 参考になるかもしれないコード
-    # portal/views.py(今いるファイル) 204~216行目
-    def put(self, request, str, format=None):
-        pass
-
 
 class GetClassSchool(APIView):
     def get(self, request, format=None):
@@ -226,7 +219,7 @@ class CreateClassSchool(APIView):
                 )
                 return JsonResponse({"success": "created"})
             else:
-                return JsonResponse({"error": "・クラス名が既存しました。"})
+                return JsonResponse({"error": "・このクラス名は既に存在しています。"})
 
     # except:
     #     return JsonResponse({"error": "somthing wrong right here"})
@@ -258,7 +251,7 @@ class UpdateClassSchool(APIView):
                         "class_studentnumber": int(class_studentnumber),
                     },
                 )
-                return JsonResponse({"sucess": "・更新しました。1"})
+                return JsonResponse({"sucess": "・更新しました。"})
             else:
                 if ClassGroup.objects.filter(class_name=class_name).count() == 0:
                     ClassGroup.objects.update_or_create(
@@ -271,12 +264,12 @@ class UpdateClassSchool(APIView):
                             "class_studentnumber": int(class_studentnumber),
                         },
                     )
-                    return JsonResponse({"sucess": "・更新しました。1"})
+                    return JsonResponse({"sucess": "・更新しました。"})
                 else:
-                    return JsonResponse({"error": "・クラス名は既存しました。"})
+                    return JsonResponse({"error": "・このクラス名は既に存在しています。"})
 
         else:
-            return JsonResponse({"error": "・クラス名は既存しました。"})
+            return JsonResponse({"error": "・このクラス名は既に存在しています。"})
 
 
 class DeleteClassSchool(APIView):
@@ -292,7 +285,9 @@ class DeleteClassSchool(APIView):
 
 
 # 掲示板の削除
-class DestroyPostView(APIView):
+
+
+class DeletePostView(APIView):
     permission_classes = [IsAuthenticated]
 
     def delete(self, request, pk, format=None):
@@ -300,8 +295,10 @@ class DestroyPostView(APIView):
         if check_user_type(user) == "2":
             try:
                 post_models = PostModels.objects.get(id=pk, poster_id=user.id)
+                post_models = PostModels.objects.get(pk=pk)
+
                 post_models.delete()
-                return JsonResponse({"success": "post be deleted"})
+                return JsonResponse({"success": "Post models be deleted"})
             except:
                 return JsonResponse({"error": "u can not deleted this post"})
 
