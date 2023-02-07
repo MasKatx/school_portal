@@ -83,5 +83,5 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def save_user_profile(sender, instance, **kwargs):
-    instance.useravatar.save()
-    instance.userprofile.save()
+    instance.user_avatar.save()
+    instance.user_profile.save()
