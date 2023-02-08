@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from django.db.models import Q
 
 # import models
-from .models import SchoolGroup, ClassGroup, PostModels
+from .models import SchoolGroup, ClassGroup, PostModels, ChatSpace
 from user_profile.models import UserProfile, UserAvatar
 from accounts.models import UserAccount
 
@@ -21,6 +21,7 @@ from .serializers import (
     ClassSchoolSerialier,
     PostModelsSerializer,
     PosterInfomationSerializer,
+    ChatSpaceSerializer,
 )
 
 
@@ -409,3 +410,31 @@ class UpdatePostView(APIView):
                 },
             )
             return JsonResponse({"success": "post be updated"})
+
+# チャットの閲覧
+class ShowChatView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None, *args, **kwargs):
+        user = self.request.user
+
+        user_profile = UserProfile.objects.get(user_id=user.id)
+        chat_group = ChatSpace.objects.get(
+            group_id=user_profile.teacher_belong_to_id
+        )
+        upper = kwargs.get("chat_num")
+        lower = upper - 3
+        chats = (
+            ChatSpace.objects.filter(chat_content_id=chat_group.id)
+            .order_by("created")
+            .reverse()[lower:upper]
+        )
+        maxPost = len(
+            ChatSpace.objects.filter(chat_content_id=chat_group.id).order_by(
+                "created"
+            )
+        )
+        isLoad = True if upper <= maxPost else False
+        print(isLoad)
+        chats = ChatSpaceSerializer(chats, many=True)
+        return JsonResponse({"data": chats.data, "isLoad": isLoad}, safe=False)
