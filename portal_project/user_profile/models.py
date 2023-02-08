@@ -12,7 +12,12 @@ def upload_path(instance, filename):
 
 class UserAvatar(models.Model):
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="user_avatar",
+        to_field="id",
+    )
     avatar = models.ImageField(upload_to=upload_path, blank=True)
 
     def __str__(self):
@@ -24,7 +29,12 @@ class UserAvatar(models.Model):
 
 class UserProfile(models.Model):
     # admin profile
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="user_profile",
+        to_field="id",
+    )
     fullname = models.CharField(max_length=255, blank=True)
     phone = models.CharField(max_length=20, blank=True)
     address = models.CharField(max_length=255, blank=True)
@@ -53,7 +63,7 @@ class UserProfile(models.Model):
     # 学生情報
     student_field_name = models.CharField(max_length=255, blank=True)
     student_department_name = models.CharField(max_length=255, blank=True)
-    student_class_name = models.CharField(max_length=5, blank=True)
+    student_class_name = models.CharField(max_length=255, blank=True)
     student_fullname_furigana = models.CharField(max_length=255, blank=True)
     student_post_num = models.CharField(max_length=10, blank=True)
 
@@ -73,5 +83,5 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def save_user_profile(sender, instance, **kwargs):
-    instance.useravatar.save()
-    instance.userprofile.save()
+    instance.user_avatar.save()
+    instance.user_profile.save()

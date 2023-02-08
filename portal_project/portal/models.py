@@ -3,6 +3,8 @@ from django.conf import settings
 import random
 import string
 
+from user_profile.models import UserProfile, UserAvatar
+
 
 def generate_unique_group_id():
     lenght = 12
@@ -12,7 +14,6 @@ def generate_unique_group_id():
             break
     return group_id
 
-
 # def generate_unique_space_id():
 #     lenght = 4
 #     while True:
@@ -21,8 +22,6 @@ def generate_unique_group_id():
 #             break
 #     return space_id
 
-
-# Create your models here.
 class SchoolGroup(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     group_name = models.CharField(max_length=255)
@@ -54,11 +53,15 @@ class ClassGroup(models.Model):
 
 # 掲示板
 class PostModels(models.Model):
-    user = models.ForeignKey(SchoolGroup, on_delete=models.CASCADE)
+    school_group = models.ForeignKey(
+        SchoolGroup, on_delete=models.CASCADE, related_name="school_group"
+    )
     title = models.CharField(max_length=255)
     content = models.TextField(default="")
     created = models.DateTimeField(auto_now_add=True)
-    created_by_id = models.CharField(max_length=255)
+    poster = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="poster"
+    )
 
     def __str__(self):
         return self.title

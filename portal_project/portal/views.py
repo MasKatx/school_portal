@@ -1,26 +1,31 @@
 from rest_framework import generics
 from django.shortcuts import render
+from django.utils import timezone
 
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from user_profile.models import UserProfile
+
 
 # django
 from django.http import JsonResponse
+from django.db.models import Q
 
 # import models
 from .models import SchoolGroup, ClassGroup, PostModels, ChatSpace
+from user_profile.models import UserProfile, UserAvatar
+from accounts.models import UserAccount
 
 # import models serializer
 from .serializers import (
     SchoolGroupSerializer,
     ClassSchoolSerialier,
-    PostModelsSerialier,
+    PostModelsSerializer,
+    PosterInfomationSerializer,
     ChatSpaceSerializer,
 )
 
 
-def check_user_type_type(user):
+def check_user_type(user):
     user_type = UserProfile.objects.get(user=user).user_type
     return user_type
 
@@ -32,7 +37,7 @@ class SchoolGroupView(APIView):
     def get(self, request, *args, **kwargs):
         try:
             user = self.request.user
-            if check_user_type_type(user) == "1":
+            if check_user_type(user) == "1":
                 school_group = SchoolGroup.objects.filter(user_id=user.id)
                 school_group = school_group.order_by("id")
                 school_group = SchoolGroupSerializer(school_group, many=True)
@@ -151,12 +156,6 @@ class DestroySchoolGroupView(APIView):
 class CreateorUpdatePostView(APIView):
     permission_classes = [IsAuthenticated]
 
-    # データの取得
-    def get(self, request, format=None):
-        post_models = PostModels.objects.all()
-        post_models = PostModelsSerialier(post_models, many=True)
-        return JsonResponse(post_models.data, safe=False)
-
     # 掲示板を作成
     def post(self, request, format=None):
         try:
@@ -221,7 +220,7 @@ class CreateClassSchool(APIView):
                 )
                 return JsonResponse({"success": "created"})
             else:
-                return JsonResponse({"error": "・クラス名が既存しました。"})
+                return JsonResponse({"error": "・このクラス名は既に存在しています。"})
 
     # except:
     #     return JsonResponse({"error": "somthing wrong right here"})
@@ -237,7 +236,7 @@ class UpdateClassSchool(APIView):
         class_manager = data["class_manager"]
         class_submanager = data["class_submanager"]
         class_studentnumber = data["class_studentnumber"]
-        if check_user_type_type(user) == "2":
+        if check_user_type(user) == "2":
             class_name_check = ClassGroup.objects.get(id=pk).class_name
             print(class_name_check, "check")
             print(class_name)
@@ -253,7 +252,7 @@ class UpdateClassSchool(APIView):
                         "class_studentnumber": int(class_studentnumber),
                     },
                 )
-                return JsonResponse({"sucess": "・更新しました。1"})
+                return JsonResponse({"sucess": "・更新しました。"})
             else:
                 if ClassGroup.objects.filter(class_name=class_name).count() == 0:
                     ClassGroup.objects.update_or_create(
@@ -266,21 +265,18 @@ class UpdateClassSchool(APIView):
                             "class_studentnumber": int(class_studentnumber),
                         },
                     )
-                    return JsonResponse({"sucess": "・更新しました。1"})
+                    return JsonResponse({"sucess": "・更新しました。"})
                 else:
-                    return JsonResponse({"error": "・クラス名は既存しました。"})
+                    return JsonResponse({"error": "・このクラス名は既に存在しています。"})
 
         else:
-            return JsonResponse({"error": "・クラス名は既存しました。"})
-
-    # except:
-    #     return JsonResponse({"error": "somthing wrong right here"})
+            return JsonResponse({"error": "・このクラス名は既に存在しています。"})
 
 
 class DeleteClassSchool(APIView):
     def delete(self, request, pk, format=None):
         user = self.request.user
-        if check_user_type_type(user) == "2":
+        if check_user_type(user) == "2":
             try:
                 class_group = ClassGroup.objects.get(pk=pk)
                 class_group.delete()
@@ -293,19 +289,125 @@ class DeleteClassSchool(APIView):
 class DeletePostView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def delete(self, request, str, format=None):
-        pass
+    def delete(self, request, pk, format=None):
+        user = self.request.user
+        if check_user_type(user) == "2":
+            try:
+                post_models = PostModels.objects.get(id=pk, poster_id=user.id)
+                post_models = PostModels.objects.get(pk=pk)
+
+                post_models.delete()
+                return JsonResponse({"success": "Post models be deleted"})
+            except:
+                return JsonResponse({"error": "u can not deleted this post"})
 
 
 # 掲示板の閲覧
 class ShowPostView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, format=None):
+    def get(self, request, format=None, *args, **kwargs):
         user = self.request.user
-        create_content = PostModels.objects.filter()
-        create_content_id = PostModelsSerialier(create_content, many=True)
-        return JsonResponse(create_content_id.data, safe=False)
+
+        user_profile = UserProfile.objects.get(user_id=user.id)
+        school_group = SchoolGroup.objects.get(
+            group_id=user_profile.teacher_belong_to_id
+        )
+        upper = kwargs.get("post_num")
+        lower = upper - 3
+        posts = (
+            PostModels.objects.filter(school_group_id=school_group.id)
+            .order_by("created")
+            .reverse()[lower:upper]
+        )
+        maxPost = len(
+            PostModels.objects.filter(school_group_id=school_group.id).order_by(
+                "created"
+            )
+        )
+        isLoad = True if upper <= maxPost else False
+        print(isLoad)
+        posts = PostModelsSerializer(posts, many=True)
+        return JsonResponse({"data": posts.data, "isLoad": isLoad}, safe=False)
+
+
+class GetPosterInfomationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None, *args, **kwargs):
+        user = self.request.user
+        user_profile = UserProfile.objects.get(user_id=user.id)
+        school_group = SchoolGroup.objects.get(
+            group_id=user_profile.teacher_belong_to_id
+        )
+        upper = kwargs.get("post_num")
+        lower = upper - 3
+        posts = (
+            PostModels.objects.filter(school_group_id=school_group.id)
+            .order_by("created")
+            .reverse()[lower:upper]
+        )
+        maxPost = len(
+            PostModels.objects.filter(school_group_id=school_group.id).order_by(
+                "created"
+            )
+        )
+        isLoad = True if upper <= maxPost else False
+
+        posters = []
+        for post in posts:
+            avatar = UserAccount.objects.get(id=post.poster_id)
+            posters.append(avatar)
+
+        posters = PosterInfomationSerializer(data=set(posters), many=True)
+        if posters.is_valid():
+            return JsonResponse(posters.data, safe=False)
+        return JsonResponse({"data": posters.data, "isLoad": isLoad}, safe=False)
+
+
+class CreatePostView(APIView):
+    def post(self, request, format=None):
+        user = self.request.user
+        if check_user_type(user) == "2":
+            user_profile = UserProfile.objects.get(user_id=user.id)
+            school_group = SchoolGroup.objects.get(
+                group_id=user_profile.teacher_belong_to_id
+            )
+            data = self.request.data
+            title = data["title"]
+            content = data["content"]
+            PostModels.objects.create(
+                title=title,
+                content=content,
+                school_group_id=school_group.id,
+                poster_id=user_profile.user_id,
+            )
+            return JsonResponse({"success": "投稿しました。"})
+
+
+class UpdatePostView(APIView):
+    def put(self, request, pk, format=None):
+        user = self.request.user
+        if check_user_type(user) == "2":
+            data = self.request.data
+            title = data["title"]
+            content = data["content"]
+            user_profile = UserProfile.objects.get(user_id=user.id)
+            school_group = SchoolGroup.objects.get(
+                group_id=user_profile.teacher_belong_to_id
+            )
+
+            PostModels.objects.update_or_create(
+                id=pk,
+                school_group_id=school_group.id,
+                poster_id=user_profile.user_id,
+                defaults={
+                    "title": title,
+                    "content": content,
+                    "created": timezone.now(),
+                },
+            )
+            return JsonResponse({"success": "post be updated"})
 
 
 # チャット機能
