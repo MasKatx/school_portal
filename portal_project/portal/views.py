@@ -423,7 +423,7 @@ class ShowChatView(APIView):
             group_id=user_profile.teacher_belong_to_id
         )
         upper = kwargs.get("chat_num")
-        lower = upper - 3
+        lower = upper - 10
         chats = (
             ChatSpace.objects.filter(chat_content_id=chat_group.id)
             .order_by("created")
