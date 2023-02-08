@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import SchoolGroup, ClassGroup, PostModels, ChatSpace
+from .models import SchoolGroup, ClassGroup, PostModels
 
 
 class SchoolGroupSerializer(serializers.ModelSerializer):
@@ -17,9 +17,24 @@ class ClassSchoolSerialier(serializers.ModelSerializer):
 class PostModelsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostModels
-        fields = "__all__"
+        fields = [
+            "id",
+            "title",
+            "content",
+            "created",
+            "poster",
+        ]
 
-class ChatSpaceSerializer(serializers.ModelSerializer):
+
+class PosterInfomationSerializer(serializers.ModelSerializer):
+    fullname_set = serializers.CharField(read_only=True, source="user_profile.fullname")
+    avatar_set = serializers.ImageField(max_length=255, source="user_avatar.avatar")
+    user_id = serializers.IntegerField(source="id")
+
     class Meta:
-        model = ChatSpace
-        fields = "__all__"
+        model = UserAccount
+        fields = [
+            "user_id",
+            "fullname_set",
+            "avatar_set",
+        ]
