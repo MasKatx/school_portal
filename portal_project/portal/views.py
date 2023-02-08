@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from django.db.models import Q
 
 # import models
-from .models import SchoolGroup, ClassGroup, PostModels
+from .models import SchoolGroup, ClassGroup, PostModels, ChatSpace
 from user_profile.models import UserProfile, UserAvatar
 from accounts.models import UserAccount
 
@@ -21,6 +21,7 @@ from .serializers import (
     ClassSchoolSerialier,
     PostModelsSerializer,
     PosterInfomationSerializer,
+    ChatSpaceSerializer,
 )
 
 
@@ -283,8 +284,6 @@ class DeleteClassSchool(APIView):
 
 
 # 掲示板の削除
-
-
 class DeletePostView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -412,3 +411,34 @@ class UpdatePostView(APIView):
             )
             posts = PostModelsSerializer(posts, many=True)
             return JsonResponse(posts.data, safe=False)
+
+
+# チャット機能
+# チャットの送信
+class CreateChatView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    # 情報の取得
+    def get(self, request, format=None):
+        chat_space = ChatSpace.objects.all()
+        chat_space = ChatSpaceSerializer(chat_space, many=True)
+        return JsonResponse(chat_space.data, safe=False)
+
+    # チャット作成
+    def post(self, request, format=None):
+        try:
+            data = self.request.data
+            user = self.request.user
+            chat_space_id = data["chat_space_id"]
+            write_chat_box = data["write_chat_box"]
+            # create_user_id = data["create_user_id"]
+            # create_user_id = UserProfile.objects.get(user_type=create_user_id)
+            ChatSpace.objects.create(
+                user=user,
+                space_id=chat_space_id,
+                chat_box=write_chat_box,
+            )
+            return JsonResponse({"success": "送信が完了しました！"})
+
+        except:
+            return JsonResponse({"error": "送信に失敗しました...."})

@@ -10,7 +10,11 @@ from django.contrib.auth.models import (
 )
 
 # Create your views here.
+
 class GetUsersView(APIView):
+    """
+    サンプルコード：テスト用
+    """
     permission_classes = (permissions.AllowAny,)
 
     def get(self, request):
@@ -20,7 +24,9 @@ class GetUsersView(APIView):
 
 
 class GetUser(APIView):
-
+    """
+    自身のアカウントのプロフィールを全て取得する
+    """
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.db import models
-from .models import SchoolGroup, ClassGroup, PostModels
+from .models import SchoolGroup, ClassGroup, PostModels, ChatSpace
 from user_profile.models import UserProfile, UserAvatar
 from accounts.models import UserAccount
 from user_profile.serializers import UserProfileSerializer, UserAvatarSerializer
@@ -43,3 +43,8 @@ class PosterInfomationSerializer(serializers.ModelSerializer):
             "fullname_set",
             "avatar_set",
         ]
+
+class ChatSpaceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatSpace
+        fields = "__all__"
