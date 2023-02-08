@@ -208,7 +208,7 @@ class CreateClassSchool(APIView):
         class_submanager = data["class_submanager"]
         class_studentnumber = data["class_studentnumber"]
         school_group = data["school_group"]
-        if check_user_type_type(user) == "2":
+        if check_user_type(user) == "2":
             if ClassGroup.objects.filter(class_name=class_name).count() == 0:
                 ClassGroup.objects.create(
                     class_name=class_name,
@@ -238,8 +238,6 @@ class UpdateClassSchool(APIView):
         class_studentnumber = data["class_studentnumber"]
         if check_user_type(user) == "2":
             class_name_check = ClassGroup.objects.get(id=pk).class_name
-            print(class_name_check, "check")
-            print(class_name)
             if class_name == class_name_check:
                 print("ton tai")
                 ClassGroup.objects.update_or_create(
@@ -326,7 +324,6 @@ class ShowPostView(APIView):
             )
         )
         isLoad = True if upper <= maxPost else False
-        print(isLoad)
         posts = PostModelsSerializer(posts, many=True)
         return JsonResponse({"data": posts.data, "isLoad": isLoad}, safe=False)
 
@@ -407,7 +404,13 @@ class UpdatePostView(APIView):
                     "created": timezone.now(),
                 },
             )
-            return JsonResponse({"success": "post be updated"})
+            posts = (
+                PostModels.objects.filter(school_group_id=school_group.id)
+                .order_by("created")
+                .reverse()[0:3]
+            )
+            posts = PostModelsSerializer(posts, many=True)
+            return JsonResponse(posts.data, safe=False)
 
 
 # チャット機能
