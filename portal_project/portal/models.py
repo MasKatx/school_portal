@@ -13,13 +13,13 @@ def generate_unique_group_id():
     return group_id
 
 
-# def generate_exchange_id():
+# def generate_unique_space_id():
 #     lenght = 4
 #     while True:
-#         exchange_id = "".join(random.choices(string.ascii_uppercase, k=lenght))
-#         if ChatModels.objects.filter(exchange_id=exchange_id).count() == 0:
+#         space_id = "".join(random.choice(string.digits, k=lenght))
+#         if ChatSpace.objects.filter(space_id=space_id).count() == 0:
 #             break
-#     return exchange_id
+#     return space_id
 
 
 # Create your models here.
@@ -67,21 +67,9 @@ class PostModels(models.Model):
 # チャット
 class ChatSpace(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    space_id = models.CharField(max_length=255)
+    space_id = models.CharField(max_length=4)
     chat_box = models.TextField()
     created_chat = models.DateTimeField(auto_now_add=True)
-    send_user = models.CharField(max_length=255)
 
     def __str__(self):
         return self.chat_box
-
-
-# class ChatRoom(models.Model):
-#     user_name = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-
-# class ChatValue(models.Model):
-#     value = models.CharField(max_length=255)
-#     created_value = models.DateTimeField(auto_now_add=True)
-#     room_id = models.CharField(max_length=255)
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

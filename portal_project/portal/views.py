@@ -9,13 +9,14 @@ from user_profile.models import UserProfile
 from django.http import JsonResponse
 
 # import models
-from .models import SchoolGroup, ClassGroup, PostModels
+from .models import SchoolGroup, ClassGroup, PostModels, ChatSpace
 
 # import models serializer
 from .serializers import (
     SchoolGroupSerializer,
     ClassSchoolSerialier,
     PostModelsSerialier,
+    ChatSpaceSerializer,
 )
 
 
@@ -181,13 +182,6 @@ class CreateorUpdatePostView(APIView):
         except:
             return JsonResponse({"error": "Not Create New Post..."})
 
-    # 掲示板の更新
-    # put --> 更新する
-    # 参考になるかもしれないコード
-    # portal/views.py(今いるファイル) 204~216行目
-    def put(self, request, str, format=None):
-        pass
-
 
 class GetClassSchool(APIView):
     def get(self, request, format=None):
@@ -296,9 +290,6 @@ class DeleteClassSchool(APIView):
 
 
 # 掲示板の削除
-# delete --> 削除する
-# 参考になるかもしれないコード
-# portal/views.py(今いるファイル) 139~147行目
 class DeletePostView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -310,8 +301,39 @@ class DeletePostView(APIView):
 class ShowPostView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, str, format=None):
+    def get(self, request, format=None):
         user = self.request.user
-        create_content = PostModels.objects.filter(created_by_id=str)
+        create_content = PostModels.objects.filter()
         create_content_id = PostModelsSerialier(create_content, many=True)
         return JsonResponse(create_content_id.data, safe=False)
+
+
+# チャット機能
+# チャットの送信
+class CreateChatView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    # 情報の取得
+    def get(self, request, format=None):
+        chat_space = ChatSpace.objects.all()
+        chat_space = ChatSpaceSerializer(chat_space, many=True)
+        return JsonResponse(chat_space.data, safe=False)
+
+    # チャット作成
+    def post(self, request, format=None):
+        try:
+            data = self.request.data
+            user = self.request.user
+            chat_space_id = data["chat_space_id"]
+            write_chat_box = data["write_chat_box"]
+            # create_user_id = data["create_user_id"]
+            # create_user_id = UserProfile.objects.get(user_type=create_user_id)
+            ChatSpace.objects.create(
+                user=user,
+                space_id=chat_space_id,
+                chat_box=write_chat_box,
+            )
+            return JsonResponse({"success": "送信が完了しました！"})
+
+        except:
+            return JsonResponse({"error": "送信に失敗しました...."})
