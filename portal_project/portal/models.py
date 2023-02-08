@@ -14,6 +14,13 @@ def generate_unique_group_id():
             break
     return group_id
 
+# def generate_unique_space_id():
+#     lenght = 4
+#     while True:
+#         space_id = "".join(random.choice(string.digits, k=lenght))
+#         if ChatSpace.objects.filter(space_id=space_id).count() == 0:
+#             break
+#     return space_id
 
 class SchoolGroup(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -63,10 +70,9 @@ class PostModels(models.Model):
 # チャット
 class ChatSpace(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    space_id = models.CharField(max_length=255)
+    space_id = models.CharField(max_length=4)
     chat_box = models.TextField()
     created_chat = models.DateTimeField(auto_now_add=True)
-    send_user = models.CharField(max_length=255)
 
     def __str__(self):
         return self.chat_box
