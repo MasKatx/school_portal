@@ -14,7 +14,7 @@ from .views import (
     GetPosterInfomationView,
     CreatePostView,
     UpdatePostView,
-    ShowChatView,
+    CreateChatView,
 )
 
 
@@ -36,10 +36,11 @@ urlpatterns = [
     path("create/post", CreateorUpdatePostView.as_view()),
     path("delete_post/<int:pk>", DeletePostView.as_view()),
     path("update/<path:str>", CreateorUpdatePostView.as_view()),
-    path("show/<path:str>", ShowPostView.as_view()),
+    path("post/getpostview", ShowPostView.as_view()),
+    path("delete/<path:str>", DeletePostView.as_view()),
     path("get_class", GetClassSchool.as_view()),
     path("create_class", CreateClassSchool.as_view()),
     path("update_class/<int:pk>", UpdateClassSchool.as_view()),
     path("delete_class/<int:pk>", DeleteClassSchool.as_view()),
-    path("show_chat/<path:str>/<int:chat_num>", ShowChatView.as_view()),
+    path("create/chat", CreateChatView.as_view()),
 ]

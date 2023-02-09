@@ -208,7 +208,7 @@ class CreateClassSchool(APIView):
         class_submanager = data["class_submanager"]
         class_studentnumber = data["class_studentnumber"]
         school_group = data["school_group"]
-        if check_user_type_type(user) == "2":
+        if check_user_type(user) == "2":
             if ClassGroup.objects.filter(class_name=class_name).count() == 0:
                 ClassGroup.objects.create(
                     class_name=class_name,
@@ -238,8 +238,6 @@ class UpdateClassSchool(APIView):
         class_studentnumber = data["class_studentnumber"]
         if check_user_type(user) == "2":
             class_name_check = ClassGroup.objects.get(id=pk).class_name
-            print(class_name_check, "check")
-            print(class_name)
             if class_name == class_name_check:
                 print("ton tai")
                 ClassGroup.objects.update_or_create(
@@ -286,8 +284,6 @@ class DeleteClassSchool(APIView):
 
 
 # 掲示板の削除
-
-
 class DeletePostView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -328,7 +324,6 @@ class ShowPostView(APIView):
             )
         )
         isLoad = True if upper <= maxPost else False
-        print(isLoad)
         posts = PostModelsSerializer(posts, many=True)
         return JsonResponse({"data": posts.data, "isLoad": isLoad}, safe=False)
 
@@ -409,32 +404,41 @@ class UpdatePostView(APIView):
                     "created": timezone.now(),
                 },
             )
-            return JsonResponse({"success": "post be updated"})
+            posts = (
+                PostModels.objects.filter(school_group_id=school_group.id)
+                .order_by("created")
+                .reverse()[0:3]
+            )
+            posts = PostModelsSerializer(posts, many=True)
+            return JsonResponse(posts.data, safe=False)
 
-# チャットの閲覧
-class ShowChatView(APIView):
+
+# チャット機能
+# チャットの送信
+class CreateChatView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, format=None, *args, **kwargs):
-        user = self.request.user
+    # 情報の取得
+    def get(self, request, format=None):
+        chat_space = ChatSpace.objects.all()
+        chat_space = ChatSpaceSerializer(chat_space, many=True)
+        return JsonResponse(chat_space.data, safe=False)
 
-        user_profile = UserProfile.objects.get(user_id=user.id)
-        chat_group = ChatSpace.objects.get(
-            group_id=user_profile.teacher_belong_to_id
-        )
-        upper = kwargs.get("chat_num")
-        lower = upper - 10
-        chats = (
-            ChatSpace.objects.filter(chat_content_id=chat_group.id)
-            .order_by("created")
-            .reverse()[lower:upper]
-        )
-        maxPost = len(
-            ChatSpace.objects.filter(chat_content_id=chat_group.id).order_by(
-                "created"
+    # チャット作成
+    def post(self, request, format=None):
+        try:
+            data = self.request.data
+            user = self.request.user
+            chat_space_id = data["chat_space_id"]
+            write_chat_box = data["write_chat_box"]
+            # create_user_id = data["create_user_id"]
+            # create_user_id = UserProfile.objects.get(user_type=create_user_id)
+            ChatSpace.objects.create(
+                user=user,
+                space_id=chat_space_id,
+                chat_box=write_chat_box,
             )
-        )
-        isLoad = True if upper <= maxPost else False
-        print(isLoad)
-        chats = ChatSpaceSerializer(chats, many=True)
-        return JsonResponse({"data": chats.data, "isLoad": isLoad}, safe=False)
+            return JsonResponse({"success": "送信が完了しました！"})
+
+        except:
+            return JsonResponse({"error": "送信に失敗しました...."})
