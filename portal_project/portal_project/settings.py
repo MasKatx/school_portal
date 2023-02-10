@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "accounts",
     "portal",
     "user_profile",
+    "chat",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
 ]
@@ -201,6 +202,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:8000",
     "http://localhost:8000",
+    # "http://10.202.24.179:3000",
 ]
 
 # LOGGING = {
