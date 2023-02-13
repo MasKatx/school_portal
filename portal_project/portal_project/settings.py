@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "djoser",
     "accounts",
     "portal",
+    "chat",
     "user_profile",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
