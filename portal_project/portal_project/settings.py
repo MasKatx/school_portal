@@ -196,7 +196,11 @@ EMAIL_HOST_PASSWORD = "vamdwlqxjhejjjrt"
 EMAIL_USE_TLS = True
 
 # cors
-CORS_ORIGIN_WHITELIST = ["http://localhost:3000"]
+CORS_ORIGIN_WHITELIST = [
+    "http://3.214.77.178/",
+    "http://3.214.77.178",
+    "http://localhost:3000",
+]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:8000",
