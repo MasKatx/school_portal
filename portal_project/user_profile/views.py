@@ -57,6 +57,7 @@ class GetAdminProfile(APIView):
             admin = UserProfile.objects.get(user_id=admin.id)
             admin = UserProfileSerializer(admin)
             return JsonResponse(admin.data)
+
         except:
             return JsonResponse({"value": "error"})
 
@@ -65,32 +66,33 @@ class UpdateUserProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
     def put(self, request, format=None):
-        try:
-            user = self.request.user
-            user = UserAccount.objects.get(id=user.id)
-            user_id = user.id
-            data = self.request.data
-            manager = data["fullname"]
-            group_phone = data["phone"]
-            group_address = data["address"]
-            group_name = data["all_group_name"]
-            if request.method == "PUT":
-                UserProfile.objects.update_or_create(
-                    id=user_id,
-                    defaults={
-                        "fullname": manager,
-                        "phone": group_phone,
-                        "address": group_address,
-                        "all_group_name": group_name,
-                    },
-                )
-                user_profile = UserProfile.objects.get(user_id=user_id)
-                user_profile = UserProfileSerializer(user_profile)
-                return JsonResponse(user_profile.data)
-        except:
-            return JsonResponse(
-                {"error": "Something went wrong when updating user profile"}
+        # try:
+        user = self.request.user
+        user = UserAccount.objects.get(id=user.id)
+        user_id = user.id
+        data = self.request.data
+        manager = data["fullname"]
+        group_phone = data["phone"]
+        group_address = data["address"]
+        group_name = data["all_group_name"]
+        if request.method == "PUT":
+            UserProfile.objects.update_or_create(
+                id=user_id,
+                defaults={
+                    "fullname": manager,
+                    "phone": group_phone,
+                    "address": group_address,
+                    "all_group_name": group_name,
+                },
             )
+            user_profile = UserProfile.objects.get(user_id=user_id)
+            user_profile = UserProfileSerializer(user_profile)
+            return JsonResponse(user_profile.data)
+
+    # except:
+    #     return JsonResponse(
+    #         {"error": "Something went wrong when updating user profile"}
+    # )
 
 
 class GetUserAvatarView(APIView):
@@ -113,16 +115,16 @@ class UpdateUserAvatarView(APIView):
 
     def put(self, request, pk, format=None):
         print(pk)
-        try:
-            avatar = request.data["avatar"]
-            print(avatar)
-            UserAvatar.objects.update_or_create(
-                user_id=pk,
-                defaults={"avatar": avatar},
-            )
-            return JsonResponse({"success": "img was updated"}, status=200)
-        except:
-            return JsonResponse({"error": "something wrong when updating user avatar"})
+        # try:
+        avatar = request.data["avatar"]
+        print(avatar)
+        UserAvatar.objects.update_or_create(
+            user_id=pk,
+            defaults={"avatar": avatar},
+        )
+        return JsonResponse({"success": "img was updated"}, status=200)
+        # except:
+        #     return JsonResponse({"error": "something wrong when updating user avatar"})
 
 
 class GetAllTeachersAccountProfile(APIView):
