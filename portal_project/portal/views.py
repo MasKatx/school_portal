@@ -52,7 +52,7 @@ class CreateOrUpdateSchoolGroupView(APIView):
 
     def post(self, request, format=None):
         user = self.request.user
-        if check_user_type_type(user) == "1":
+        if check_user_type(user) == "1":
             data = self.request.data
             group_id = data["group_id"]
             group_id = f"{group_id}".upper()
@@ -85,7 +85,7 @@ class CreateOrUpdateSchoolGroupView(APIView):
 
     def put(self, request, pk, format=None):
         user = self.request.user
-        if check_user_type_type(user) == "1":
+        if check_user_type(user) == "1":
             data = self.request.data
             group_id = data["group_id"]
             group_id = f"{group_id}".upper()
@@ -124,11 +124,13 @@ class CreateOrUpdateSchoolGroupView(APIView):
                 return JsonResponse(
                     {"error": "its exists before try to orther group id?"}
                 )
+        else:
+            return JsonResponse({"error": "cant access"})
 
 
-class GetDetailSchoolGroup(APIView):
-    def get(self, request, format=None):
-        user = self.request.user
+# class GetDetailSchoolGroup(APIView):
+#     def get(self, request, format=None):
+#         user = self.request.user
 
 
 class DestroySchoolGroupView(APIView):
@@ -143,13 +145,15 @@ class DestroySchoolGroupView(APIView):
 
     def delete(self, request, pk, format=None):
         user = self.request.user
-        if check_user_type_type(user) == "1":
+        if check_user_type(user) == "1":
             try:
                 school_group = SchoolGroup.objects.get(pk=pk)
                 school_group.delete()
                 return JsonResponse({"success": "School group be deleted"})
             except:
                 return JsonResponse({"error": "u can not deleted this group"})
+        else:
+            return JsonResponse({"error": "u can not deleted this group"})
 
 
 # 掲示板の作成
@@ -207,7 +211,11 @@ class CreateClassSchool(APIView):
         class_manager = data["class_manager"]
         class_submanager = data["class_submanager"]
         class_studentnumber = data["class_studentnumber"]
-        school_group = data["school_group"]
+        # school_group = data["school_group"]
+        user_profile = UserProfile.objects.get(user_id=user.id)
+        school_group_id = SchoolGroup.objects.get(
+            group_id=user_profile.teacher_belong_to_id
+        )
         if check_user_type(user) == "2":
             if ClassGroup.objects.filter(class_name=class_name).count() == 0:
                 ClassGroup.objects.create(
@@ -216,7 +224,7 @@ class CreateClassSchool(APIView):
                     class_manager=class_manager,
                     class_submanager=class_submanager,
                     class_studentnumber=class_studentnumber,
-                    school_group_id=int(school_group),
+                    school_group_id=int(school_group_id.id),
                 )
                 return JsonResponse({"success": "created"})
             else:
