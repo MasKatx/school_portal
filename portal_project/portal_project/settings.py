@@ -199,11 +199,15 @@ EMAIL_USE_TLS = True
 # cors
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
+    "http://172.28.144.1:3000",
+    "http://10.202.24:3000",
 ]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:8000",
     "http://localhost:8000",
+    # "http://172.28.144.1:3000",
+    "http://10.202.24:3000",
 ]
 
 LOGGING = {
