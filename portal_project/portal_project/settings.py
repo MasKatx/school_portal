@@ -22,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-licitk(tv4cx_8sr+k-3a*%zr3_v*(r_zd##39=^xune@-k@@8"
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.environ.get("ALLOWED_HOSTS")]
 
 
 # Application definition
@@ -44,8 +44,8 @@ INSTALLED_APPS = [
     "djoser",
     "accounts",
     "portal",
-    "user_profile",
     "chat",
+    "user_profile",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
 ]
@@ -133,14 +133,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = "/static/"
+STATIC_URL = "/build/"
 
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "build/static")]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = "/usr/share/nginx/html/media"
 MEDIA_URL = "/media/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static/images")
+STATIC_ROOT = "/usr/share/nginx/html/build"
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
@@ -210,44 +210,48 @@ CORS_ALLOWED_ORIGINS = [
     "http://10.202.24:3000",
 ]
 
-# LOGGING = {
-#     "version": 1,
-#     "disable_existing_loggers": False,
-#     "loggers": {
-#         "django": {
-#             "handlers": ["console"],
-#             "level": "INFO",
-#         },
-#         "user_profile": {
-#             "handlers": ["console"],
-#             "level": "DEBUG",
-#         },
-#         "portal": {
-#             "handlers": ["console"],
-#             "level": "DEBUG",
-#         },
-#         "accounts": {
-#             "handlers": ["console"],
-#             "level": "DEBUG",
-#         },
-#     },
-#     "handlers": {
-#         "console": {
-#             "level": "DEBUG",
-#             "class": "logging.StreamHandler",
-#             "formatter": "dev",
-#         },
-#     },
-#     "formatters": {
-#         "dev": {
-#             "format": "\t".join(
-#                 [
-#                     "%(asctime)s",
-#                     "[%(levelname)s]",
-#                     "%(pathname)s(Line:%(lineno)d)",
-#                     "%(message)s",
-#                 ]
-#             )
-#         },
-#     },
-# }
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "INFO",
+        },
+        "user_profile": {
+            "handlers": ["file"],
+            "level": "INFO",
+        },
+        "portal": {
+            "handlers": ["file"],
+            "level": "INFO",
+        },
+        "accounts": {
+            "handlers": ["file"],
+            "level": "INFO",
+        },
+    },
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": os.path.join(BASE_DIR, "logs/django.log"),
+            "formatter": "prod",
+            "when": "D",
+            "interval": 1,
+            "backupCount": 7,
+        },
+    },
+    "formatters": {
+        "prod": {
+            "format": "\t".join(
+                [
+                    "%(asctime)s",
+                    "[%(levelname)s]",
+                    "%(pathname)s(Line:%(lineno)d)",
+                    "%(message)s",
+                ]
+            )
+        },
+    },
+}
