@@ -52,6 +52,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin, models.Model):
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email", "created_at"]
+    # REQUIRED_FIELDS = ["email"]
 
     def __str__(self):
         return self.username
