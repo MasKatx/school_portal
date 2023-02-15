@@ -22,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+SECRET_KEY = "django-insecure-licitk(tv4cx_8sr+k-3a*%zr3_v*(r_zd##39=^xune@-k@@8"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = [os.environ.get("ALLOWED_HOSTS")]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -44,8 +44,8 @@ INSTALLED_APPS = [
     "djoser",
     "accounts",
     "portal",
-    "chat",
     "user_profile",
+    "chat",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
 ]
@@ -133,15 +133,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-# STATIC_URL = "/build/"
 STATIC_URL = "/static/"
 
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "build/static")]
 
-MEDIA_ROOT = "/usr/share/nginx/html/media"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
-STATIC_ROOT = "/usr/share/nginx/html/build/static"
+STATIC_ROOT = os.path.join(BASE_DIR, "static/images")
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
