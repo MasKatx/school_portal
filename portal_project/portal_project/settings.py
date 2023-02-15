@@ -203,6 +203,7 @@ CORS_ORIGIN_WHITELIST = [
     "http://172.28.144.1:3000",
     "http://10.202.24:3000",
     "http://3.214.77.178:8000",
+    "https://tky-edify.net/",
     # "http://3.214.77.178",
 ]
 CORS_ALLOWED_ORIGINS = [
@@ -212,14 +213,15 @@ CORS_ALLOWED_ORIGINS = [
     # "http://172.28.144.1:3000",
     "http://10.202.24:3000",
     "http://3.214.77.178:8000",
+    "https://tky-edify.net/",
     # "http://3.214.77.178",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_TRUSTED_ORIGINS = [
-        'http://3.214.77.178',
-    ]
+    "http://3.214.77.178",
+]
 
 LOGGING = {
     "version": 1,
