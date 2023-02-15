@@ -201,6 +201,9 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
     "http://172.28.144.1:3000",
     "http://10.202.24:3000",
+    "http://3.214.77.178:8000",
+    "https://tky-edify.net/",
+    # "http://3.214.77.178",
 ]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
@@ -208,46 +211,59 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     # "http://172.28.144.1:3000",
     "http://10.202.24:3000",
+    "http://3.214.77.178:8000",
+    "https://tky-edify.net/",
+    # "http://3.214.77.178",
 ]
 
-# LOGGING = {
-#     "version": 1,
-#     "disable_existing_loggers": False,
-#     "loggers": {
-#         "django": {
-#             "handlers": ["console"],
-#             "level": "INFO",
-#         },
-#         "user_profile": {
-#             "handlers": ["console"],
-#             "level": "DEBUG",
-#         },
-#         "portal": {
-#             "handlers": ["console"],
-#             "level": "DEBUG",
-#         },
-#         "accounts": {
-#             "handlers": ["console"],
-#             "level": "DEBUG",
-#         },
-#     },
-#     "handlers": {
-#         "console": {
-#             "level": "DEBUG",
-#             "class": "logging.StreamHandler",
-#             "formatter": "dev",
-#         },
-#     },
-#     "formatters": {
-#         "dev": {
-#             "format": "\t".join(
-#                 [
-#                     "%(asctime)s",
-#                     "[%(levelname)s]",
-#                     "%(pathname)s(Line:%(lineno)d)",
-#                     "%(message)s",
-#                 ]
-#             )
-#         },
-#     },
-# }
+CORS_ALLOW_ALL_ORIGINS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://3.214.77.178",
+]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "INFO",
+        },
+        "user_profile": {
+            "handlers": ["file"],
+            "level": "INFO",
+        },
+        "portal": {
+            "handlers": ["file"],
+            "level": "INFO",
+        },
+        "accounts": {
+            "handlers": ["file"],
+            "level": "INFO",
+        },
+    },
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": os.path.join(BASE_DIR, "logs/django.log"),
+            "formatter": "prod",
+            "when": "D",
+            "interval": 1,
+            "backupCount": 7,
+        },
+    },
+    "formatters": {
+        "prod": {
+            "format": "\t".join(
+                [
+                    "%(asctime)s",
+                    "[%(levelname)s]",
+                    "%(pathname)s(Line:%(lineno)d)",
+                    "%(message)s",
+                ]
+            )
+        },
+    },
+}
