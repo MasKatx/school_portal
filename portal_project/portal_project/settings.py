@@ -133,7 +133,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-#STATIC_URL = "/build/"
+# STATIC_URL = "/build/"
 STATIC_URL = "/static/"
 
 
@@ -202,6 +202,7 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
     "http://172.28.144.1:3000",
     "http://10.202.24:3000",
+    "http://3.214.77.178",
 ]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
@@ -209,6 +210,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     # "http://172.28.144.1:3000",
     "http://10.202.24:3000",
+    "http://3.214.77.178",
 ]
 
 LOGGING = {
