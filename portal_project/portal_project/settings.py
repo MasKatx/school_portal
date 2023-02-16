@@ -192,22 +192,16 @@ AUTH_USER_MODEL = "accounts.UserAccount"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "hadiemhonglg01@gmail.com"
-EMAIL_HOST_PASSWORD = "vamdwlqxjhejjjrt"
+EMAIL_HOST_USER = "1640acslhp2@gmail.com"
+EMAIL_HOST_PASSWORD = "seaeelskrnrcdrtn"
 EMAIL_USE_TLS = True
 
 # cors
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
-    "http://172.28.144.1:3000",
-    "http://10.202.24:3000",
 ]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://127.0.0.1:8000",
-    "http://localhost:8000",
-    # "http://172.28.144.1:3000",
-    "http://10.202.24:3000",
 ]
 
 # LOGGING = {
