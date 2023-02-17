@@ -79,9 +79,7 @@ class CreateOrUpdateSchoolGroupView(APIView):
                     school_group = SchoolGroupSerializer(school_group)
                     return JsonResponse(school_group.data)
             except:
-                return JsonResponse(
-                    {"error": "its exists before try to orther group id?"}
-                )
+                return JsonResponse({"error": "この学校IDは既に存在しています"})
 
     def put(self, request, pk, format=None):
         user = self.request.user
@@ -121,9 +119,7 @@ class CreateOrUpdateSchoolGroupView(APIView):
                 school_group = SchoolGroupSerializer(school_group)
                 return JsonResponse(school_group.data)
             except:
-                return JsonResponse(
-                    {"error": "its exists before try to orther group id?"}
-                )
+                return JsonResponse({"error": "この学校IDは既に存在しています"})
         else:
             return JsonResponse({"error": "cant access"})
 
@@ -151,9 +147,9 @@ class DestroySchoolGroupView(APIView):
                 school_group.delete()
                 return JsonResponse({"success": "School group be deleted"})
             except:
-                return JsonResponse({"error": "u can not deleted this group"})
+                return JsonResponse({"error": "この学校は削除できません"})
         else:
-            return JsonResponse({"error": "u can not deleted this group"})
+            return JsonResponse({"error": "この学校は削除できません"})
 
 
 # 掲示板の作成
@@ -228,7 +224,7 @@ class CreateClassSchool(APIView):
                 )
                 return JsonResponse({"success": "created"})
             else:
-                return JsonResponse({"error": "・このクラス名は既に存在しています。"})
+                return JsonResponse({"error": "このクラス名は既に存在しています。"})
 
     # except:
     #     return JsonResponse({"error": "somthing wrong right here"})
