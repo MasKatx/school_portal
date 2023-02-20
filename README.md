@@ -1,4 +1,5 @@
 # ![Edify](https://readme-typing-svg.herokuapp.com/?font=Inter&color=3A9CDF&size=30&weight=700&lines=Edify)
+
 ## ～学校ポータルシステム～
 
 ![Edify](./portal_project/media/logos/linkedin_banner_image_1.png "Edify")
@@ -70,9 +71,13 @@
 
 - Amazon EC2
 - AWS EIP
-- Amazon Route 53: 検討中
+- Amazon Route 53
+- AWS Certificate Manager
 - Gunicorn
 - nginx
+
+クラウドの構築図：  
+![cloud](./portal_project/media/readme/AWS.drawio.png "cloud")
 
 ### 開発環境
 
